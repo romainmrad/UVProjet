@@ -1,0 +1,90 @@
+@startuml
+
+skinparam ParticipantFontStyle bold
+skinparam DatabaseFontStyle bold
+skinparam CollectionsFontStyle bold
+autonumber
+
+
+title Project UML Diagram
+
+
+database "YFinance API" #3D8B7F
+participant "Data Handler" #White
+database "Local data" #SteelBlue
+participant Computation #White
+participant Grapher #White
+collections Plots #GoldenRod
+collections Logs #GoldenRod
+
+
+group Data Fetching
+"Data Handler"->"YFinance API": Send query to API
+activate "Data Handler" #LightSlateGrey
+activate "YFinance API" #LightSlateGrey
+"YFinance API"->"Data Handler": Return stock data
+deactivate "YFinance API"
+end
+
+
+autonumber stop
+"Data Handler"-->>Logs
+autonumber resume
+
+
+group Data Pre-processing
+"Data Handler"->"Data Handler": Filter data
+"Data Handler"->"Data Handler": Reduce data
+"Data Handler"->"Local data": Out pre-processed \n data to JSON
+deactivate "Data Handler"
+activate "Local data" #LightSlateGrey
+end
+
+
+autonumber stop
+"Data Handler"-->>Logs
+autonumber resume
+
+
+group Data Computing
+"Local data"->Computation: Load data
+deactivate "Local data"
+activate Computation #LightSlateGrey
+Computation->Computation: Compute stock \n profitability
+Computation->Computation: Compute portfolio \n Sharpe Ratio
+Computation->Computation: Predict current portfolio \n profitability
+Computation->Computation: Recommend action
+Computation->"Local data": Out computed data \n to JSON
+deactivate Computation
+activate "Local data" #LightSlateGrey
+end
+
+
+autonumber stop
+Computation-->>Logs
+autonumber resume
+
+
+group Data Visualisation
+"Local data"->Grapher: Load computed data
+deactivate "Local data"
+activate Grapher #LightSlateGrey
+Grapher->Plots: Plot portfolio \n distribution
+Grapher->Plots: Plot candlestick graph \n for portfolio stocks
+end
+
+
+autonumber stop
+Grapher-->>Logs
+autonumber resume
+
+
+@enduml
+
+@startuml
+colors SteelBlue
+@enduml
+
+@startuml
+colors 3D8B7F
+@enduml
