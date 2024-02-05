@@ -3,6 +3,9 @@
 skinparam ParticipantFontStyle bold
 skinparam DatabaseFontStyle bold
 skinparam CollectionsFontStyle bold
+skinparam BackgroundColor White
+skinparam TitleFontSize 25
+skinparam TitleFontStyle bold
 autonumber
 
 
@@ -13,6 +16,7 @@ database "YFinance API" #3D8B7F
 participant "Data Handler" #White
 database "Local data" #SteelBlue
 participant Computation #White
+participant Prediction #White
 participant Grapher #White
 collections Plots #GoldenRod
 collections Logs #GoldenRod
@@ -35,7 +39,7 @@ autonumber resume
 group Data Pre-processing
 "Data Handler"->"Data Handler": Filter data
 "Data Handler"->"Data Handler": Reduce data
-"Data Handler"->"Local data": Out pre-processed \n data to JSON
+"Data Handler"->"Local data": Out pre-processed \n data to CSV
 deactivate "Data Handler"
 activate "Local data" #LightSlateGrey
 end
@@ -46,18 +50,17 @@ autonumber stop
 autonumber resume
 
 
-group Data Computing
 "Local data"->Computation: Load data
+group Data Computing
 deactivate "Local data"
 activate Computation #LightSlateGrey
 Computation->Computation: Compute stock \n profitability
 Computation->Computation: Compute portfolio \n Sharpe Ratio
-Computation->Computation: Predict current portfolio \n profitability
-Computation->Computation: Recommend action
+end
 Computation->"Local data": Out computed data \n to JSON
 deactivate Computation
 activate "Local data" #LightSlateGrey
-end
+
 
 
 autonumber stop
@@ -65,13 +68,32 @@ Computation-->>Logs
 autonumber resume
 
 
-group Data Visualisation
-"Local data"->Grapher: Load computed data
+"Local data"->Prediction: Load data
+group Data Prediction
 deactivate "Local data"
+activate Prediction #LightSlateGrey
+Prediction->Prediction: Predict current\n portfolio profitability
+Prediction->Prediction: Predict other stocks \n profitability
+Prediction->Prediction: Recommend \n trading action
+end
+Prediction->"Local data": Out predicted data \n to JSON
+deactivate Prediction
+activate "Local data" #LightSlateGrey
+
+
+autonumber stop
+Prediction-->>Logs
+autonumber resume
+
+
+"Local data"->Grapher: Load data
+deactivate "Local data"
+group Data Visualisation
 activate Grapher #LightSlateGrey
 Grapher->Plots: Plot portfolio \n distribution
 Grapher->Plots: Plot candlestick graph \n for portfolio stocks
 end
+deactivate Grapher
 
 
 autonumber stop
