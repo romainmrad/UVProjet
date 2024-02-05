@@ -22,11 +22,12 @@ UVProjet/
 │   └── sequence_diagram/
 │       ├── sequence.puml
 │       └── sequence.svg
+├── graphs/
+├── logs/
 ├── src/
 │   ├── data_handler.py
 │   └── parameters.py
-├── logs
-├── tests
+├── tests/
 ├── README.md
 ├── requirements.txt
 └── .gitignore
