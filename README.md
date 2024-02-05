@@ -15,20 +15,19 @@ chartist profitability prediction.
 ## Directory Structure
 
 ```
-.
-└── UVProjet/
-    ├── data/
-    │   └── historical
-    ├── docs/
-    │   └── sequence_diagram/
-    │       ├── sequence.puml
-    │       └── sequence.svg
-    ├── src/
-    │   ├── data_handler.py
-    │   └── parameters.py
-    ├── logs
-    ├── tests
-    ├── README.md
-    ├── requirements.txt
-    └── .gitignore
+UVProjet/
+├── data/
+│   └── historical
+├── docs/
+│   └── sequence_diagram/
+│       ├── sequence.puml
+│       └── sequence.svg
+├── src/
+│   ├── data_handler.py
+│   └── parameters.py
+├── logs
+├── tests
+├── README.md
+├── requirements.txt
+└── .gitignore
 ```
