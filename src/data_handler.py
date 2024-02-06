@@ -13,7 +13,7 @@ def fetch_stock_historical_data(
     :param period: historical time period to load
     """
     # Fetching stock data using Yahoo Finance API
-    stock_data = yf.Ticker(ticker_symbol).history(period=period)[['Open', 'High', 'Low', 'Close']]
+    stock_data = yf.Ticker(ticker=ticker_symbol).history(period=period)[['Open', 'High', 'Low', 'Close']]
     if not stock_data.empty:
         stock_data = stock_data.reset_index()  # Reset index of returned dataframe
         stock_data.dropna(axis=0, inplace=True)  # Drop NA value rows
@@ -26,7 +26,7 @@ def fetch_stock_historical_data(
 
 def fetch_market_historical_data(
         market_index_ticker_symbol: str,
-        stock_ticker_symbols: list,
+        stock_ticker_symbols: list[str],
         period: str
 ) -> None:
     """
