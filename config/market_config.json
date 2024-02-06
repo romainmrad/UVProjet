@@ -2,7 +2,7 @@
     "Market": "Euronext Paris",
     "Period": "1mo",
     "MarketIndexSymbol": "^FCHI",
-    "MarketTickerSymbols": [
+    "StockTickerSymbols": [
         "AAA.PA",
         "AB.PA",
         "ABCA.PA",
