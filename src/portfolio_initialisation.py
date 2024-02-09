@@ -61,7 +61,7 @@ def extract_top_n_stocks(
 def format_portfolio_data(
         n: int,
         invested_capital: int | float,
-        symbols: list[str],
+        stock_ticker_symbols: list[str],
         weights: np.ndarray,
         stock_returns: pd.DataFrame
 ) -> dict:
@@ -69,7 +69,7 @@ def format_portfolio_data(
     Format portfolio data for JSON file
     :param n: number of assets
     :param invested_capital: invested capital
-    :param symbols: ticker symbols of portfolio stock
+    :param stock_ticker_symbols: ticker symbols of portfolio stock
     :param weights: individual stock weights
     :param stock_returns: daily returns for portfolio stocks
     :return: dictionary-formatted portfolio data
@@ -88,7 +88,7 @@ def format_portfolio_data(
     }
 
     # Iterate over portfolio stocks
-    for symbol, weight in zip(symbols, weights):
+    for symbol, weight in zip(stock_ticker_symbols, weights):
         portfolio['Stocks'][symbol] = {}
         # Add weight
         portfolio['Stocks'][symbol]['Weight'] = weight
@@ -108,7 +108,13 @@ def compute_optimal_portfolio(
         stock_ticker_symbols: list[str],
         period: str
 ) -> None:
-
+    """
+    Compute optimal initial portfolio
+    :param n: number of assets
+    :param invested_capital: invested capital
+    :param stock_ticker_symbols: ticker symbols of portfolio stock
+    :param period: historical time period to load
+    """
     # Fetch top n stock data
     returns = extract_top_n_stocks(n=n, stock_ticker_symbols=stock_ticker_symbols, period=period)
     portfolio_symbols = list(returns.columns)
