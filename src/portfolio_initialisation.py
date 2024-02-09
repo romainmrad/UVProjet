@@ -3,8 +3,9 @@ import os
 import yfinance as yf
 import pandas as pd
 import numpy as np
-from scipy.optimize import minimize, Bounds, LinearConstraint, NonlinearConstraint
+from scipy.optimize import minimize, Bounds, LinearConstraint
 from src.parameters import target_symbols, target_period, n_assets, capital, risk_free_rate
+from src.grapher import plot_portfolio_visualisation
 
 
 def neg_sharpe_ratio(
@@ -139,7 +140,7 @@ def compute_optimal_portfolio(
     optimal_portfolio = format_portfolio_data(
         n=n,
         invested_capital=invested_capital,
-        symbols=portfolio_symbols,
+        stock_ticker_symbols=portfolio_symbols,
         weights=optimal_weights,
         stock_returns=returns
     )
@@ -149,6 +150,8 @@ def compute_optimal_portfolio(
     # Output data to JSON
     with open('../data/portfolio/initial_portfolio.json', 'w') as file:
         json.dump(optimal_portfolio, file, indent=4)
+    # Visualise portfolio
+    plot_portfolio_visualisation(optimal_portfolio)
     print('Successful output of portfolio data to JSON')
 
 
