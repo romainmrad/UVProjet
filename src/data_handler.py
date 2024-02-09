@@ -1,3 +1,4 @@
+import pandas as pd
 import yfinance as yf
 import os
 from parameters import market_symbol, target_symbols, target_period
@@ -13,10 +14,11 @@ def fetch_stock_historical_data(
     :param period: historical time period to load
     """
     # Fetching stock data using Yahoo Finance API
-    stock_data = yf.Ticker(ticker=ticker_symbol).history(period=period)[['Open', 'High', 'Low', 'Close']]
+    stock_data: pd.DataFrame = yf.Ticker(ticker=ticker_symbol).history(period=period)[['Open', 'High', 'Low', 'Close']]
     if not stock_data.empty:
         stock_data = stock_data.reset_index()  # Reset index of returned dataframe
         stock_data.dropna(axis=0, inplace=True)  # Drop NA value rows
+        stock_data.sort_values(by='Date', ascending=False, inplace=True)
         print(f'success for {ticker_symbol}')  # Log success
         stock_data.to_csv(f'../data/historical/{ticker_symbol}.csv')
     # If returned data is empty, it means that the passed ticker symbol is invalid
