@@ -1,4 +1,5 @@
 import json
+import os
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -136,7 +137,9 @@ def compute_optimal_portfolio(
         weights=optimal_weights,
         stock_returns=returns
     )
-
+    if not os.path.exists('../data/portfolio/'):
+        # Create the directory
+        os.makedirs('../data/portfolio/')
     # Output data to JSON
     with open('../data/portfolio/initial_portfolio.json', 'w') as file:
         json.dump(optimal_portfolio, file, indent=4)

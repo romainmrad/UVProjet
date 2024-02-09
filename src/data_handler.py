@@ -37,6 +37,10 @@ def fetch_market_historical_data(
     :param stock_ticker_symbols: list of target stock ticker symbols
     :param period: historical time period to load
     """
+    # Check if the path exists
+    if not os.path.exists('../data/historical/'):
+        # Create the directory
+        os.makedirs('../data/historical/')
     # Iterate over historical data directory
     for item in os.listdir('../data/historical/'):
         # Remove unwanted historical data files
