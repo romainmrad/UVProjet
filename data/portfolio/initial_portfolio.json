@@ -1,34 +1,39 @@
 {
     "Characteristics": {
         "NumberOfAssets": 5,
-        "ExpectedReturn": 0.047108549722035174,
-        "Risk": 0.006966817797015701
+        "ExpectedReturn": 0.22945851855752117,
+        "Risk": 0.41008222496251306
     },
     "Stocks": {
+        "GTBP.PA": {
+            "CompanyName": "GT Biopharma, Inc.",
+            "Weight": 0.10000018307004183,
+            "Amount": 10000.018307004182,
+            "Shares": 1069
+        },
         "MLCOT.PA": {
-            "Weight": 0.10000079883584476,
-            "Amount": 10000.079883584476,
-            "Shares": 200001
+            "CompanyName": "Gour Medical SA",
+            "Weight": 0.31465688318891266,
+            "Amount": 31465.688318891265,
+            "Shares": 629313
         },
         "FALG.PA": {
-            "Weight": 0.24395196409845785,
-            "Amount": 24395.196409845783,
-            "Shares": 29285
+            "CompanyName": "Fermentalg SA",
+            "Weight": 0.385314541086178,
+            "Amount": 38531.4541086178,
+            "Shares": 46256
         },
         "MLFTI.PA": {
-            "Weight": 0.1000048660325706,
-            "Amount": 10000.486603257059,
-            "Shares": 333349
+            "CompanyName": "France Tourisme Immobilier SA",
+            "Weight": 0.10001098972999023,
+            "Amount": 10001.098972999023,
+            "Shares": 333369
         },
-        "VANTI.PA": {
-            "Weight": 0.10000136643817374,
-            "Amount": 10000.136643817374,
-            "Shares": 65963
-        },
-        "GBT.PA": {
-            "Weight": 0.45604100459495434,
-            "Amount": 45604.100459495436,
-            "Shares": 1774
+        "MLAAT.PA": {
+            "CompanyName": "Azorean Aquatic Technologies, S.A.",
+            "Weight": 0.10001740292487728,
+            "Amount": 10001.740292487728,
+            "Shares": 181849
         }
     }
 }

@@ -6,15 +6,17 @@ from tools import get_company_name
 
 
 def plot_portfolio_visualisation(portfolio_data: dict) -> None:
+    """
+    Visualise portfolio diversification using invested amount and number of shares
+    :param portfolio_data: portfolio data
+    """
     portfolio_stock_data = {
         'Company': [],
-        'Weight': [],
         'Amount': [],
         'Shares': []
     }
     for stock, stock_data in portfolio_data['Stocks'].items():
         portfolio_stock_data['Company'].append(get_company_name(stock))
-        portfolio_stock_data['Weight'].append(stock_data['Weight'])
         portfolio_stock_data['Amount'].append(round(stock_data['Amount'], 2))
         portfolio_stock_data['Shares'].append(stock_data['Shares'])
 
@@ -22,19 +24,9 @@ def plot_portfolio_visualisation(portfolio_data: dict) -> None:
     # Plotting
     plt.figure(figsize=(20, 10))
     colors = sns.color_palette('YlGnBu')[0:len(df)]
-    # Pie chart for the Weight column
-    plt.subplot(1, 3, 1)
-    plt.pie(
-        df['Weight'],
-        labels=df['Company'],
-        colors=colors,
-        autopct='%1.1f%%',
-        startangle=90
-    )
-    plt.title('Portfolio Composition by Weight', fontweight='bold')
 
     # Pie chart for the Amount column
-    plt.subplot(1, 3, 2)
+    plt.subplot(1, 2, 1)
     plt.pie(
         df['Amount'],
         labels=df['Company'],
@@ -45,7 +37,7 @@ def plot_portfolio_visualisation(portfolio_data: dict) -> None:
     plt.title('Portfolio Composition by Amount', fontweight='bold')
 
     # Pie chart for the Shares column
-    plt.subplot(1, 3, 3)
+    plt.subplot(1, 2, 2)
     plt.pie(
         df['Shares'],
         labels=df['Company'],
@@ -59,10 +51,6 @@ def plot_portfolio_visualisation(portfolio_data: dict) -> None:
     if not os.path.exists('../graphs/portfolio/'):
         # Create the directory
         os.makedirs('../graphs/portfolio/')
-    # Toggle full screen mode
-    plt.get_current_fig_manager().full_screen_toggle()
-    # Toggle tight layout
-    plt.tight_layout()
     # Save the figure to a file path
-    plt.savefig('../graphs/portfolio/initial_portfolio.png', dpi=540)
+    plt.savefig('../graphs/portfolio/initial_portfolio.png')
     plt.close()

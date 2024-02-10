@@ -6,6 +6,7 @@ import numpy as np
 from scipy.optimize import minimize, Bounds, LinearConstraint
 from src.parameters import target_symbols, target_period, n_assets, capital, risk_free_rate
 from src.grapher import plot_portfolio_visualisation
+from tools import get_company_name
 
 
 def neg_sharpe_ratio(
@@ -77,7 +78,6 @@ def format_portfolio_data(
     """
     # Compute weighted returns
     weighted_returns = (stock_returns * weights).sum(axis=1)
-
     # Initialise portfolio dictionary
     portfolio = {
         'Characteristics': {
@@ -91,6 +91,8 @@ def format_portfolio_data(
     # Iterate over portfolio stocks
     for symbol, weight in zip(stock_ticker_symbols, weights):
         portfolio['Stocks'][symbol] = {}
+        # Add company name
+        portfolio['Stocks'][symbol]['CompanyName'] = get_company_name(symbol)
         # Add weight
         portfolio['Stocks'][symbol]['Weight'] = weight
         # Add amount invested
@@ -99,7 +101,6 @@ def format_portfolio_data(
         current_closing_price = yf.download(symbol, period='1D')['Adj Close'].values[0]
         # Compute number of shares
         portfolio['Stocks'][symbol]['Shares'] = int((weight * invested_capital) // current_closing_price)
-
     return portfolio
 
 
@@ -119,12 +120,10 @@ def compute_optimal_portfolio(
     # Fetch top n stock data
     returns = extract_top_n_stocks(n=n, stock_ticker_symbols=stock_ticker_symbols, period=period)
     portfolio_symbols = list(returns.columns)
-
     # Set up the optimisation problem
     weights = 1/n * np.ones(n)
     weight_bounds = Bounds(lb=0.1 * np.ones(n), ub=np.ones(1))
     linear_constraint = LinearConstraint(np.ones(n), lb=1, ub=1)
-
     # Solve optimisation problem
     optimisation = minimize(
         fun=neg_sharpe_ratio,
@@ -153,6 +152,7 @@ def compute_optimal_portfolio(
     # Visualise portfolio
     plot_portfolio_visualisation(optimal_portfolio)
     print('Successful output of portfolio data to JSON')
+    print('Successful plotted of portfolio diversification')
 
 
 if __name__ == '__main__':

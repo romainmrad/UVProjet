@@ -10,9 +10,9 @@ with open('../config/market_config.json', 'r') as market_config:
     target_symbols: list[str] = market_config_data['StockTickerSymbols']  # All ticker symbols for stocks
 
 # Read market JSON configuration file
-with open('../config/portfolio_config.json', 'r') as market_config:
+with open('../config/portfolio_config.json', 'r') as portfolio_config:
     # Stock ticker symbols at Euronext Paris
-    portfolio_config_data: dict = json.load(market_config)
+    portfolio_config_data: dict = json.load(portfolio_config)
     n_assets: int = portfolio_config_data['NumberOfAssets']
     capital: int | float = portfolio_config_data['Capital']
     risk_free_rate: float = portfolio_config_data["RiskFreeRate"]
