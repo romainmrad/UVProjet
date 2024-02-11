@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from tools import get_company_name
+from src.tools import get_company_name
 
 
 def plot_portfolio_visualisation(portfolio_data: dict) -> None:
@@ -52,5 +52,5 @@ def plot_portfolio_visualisation(portfolio_data: dict) -> None:
         # Create the directory
         os.makedirs('../graphs/portfolio/')
     # Save the figure to a file path
-    plt.savefig('../graphs/portfolio/initial_portfolio.png')
+    plt.savefig('../graphs/portfolio/current_portfolio.png')
     plt.close()

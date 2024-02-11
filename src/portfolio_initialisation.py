@@ -6,7 +6,7 @@ import numpy as np
 from scipy.optimize import minimize, Bounds, LinearConstraint
 from src.parameters import target_symbols, target_period, n_assets, capital, risk_free_rate
 from src.grapher import plot_portfolio_visualisation
-from tools import get_company_name
+from src.tools import get_company_name
 
 
 def neg_sharpe_ratio(
@@ -15,7 +15,7 @@ def neg_sharpe_ratio(
         rfr: float
 ) -> float:
     """
-    Compute the inverse Sharpe ratio for a portfolio of weights x
+    Compute negative Sharpe ratio for a portfolio of weights x
     :param x: the weights of the portfolio
     :param stock_returns: dataframe of stock daily returns
     :param rfr: risk-free rate for ratio computing
@@ -65,7 +65,7 @@ def format_portfolio_data(
         invested_capital: int | float,
         stock_ticker_symbols: list[str],
         weights: np.ndarray,
-        stock_returns: pd.DataFrame
+        stock_returns: pd.DataFrame,
 ) -> dict:
     """
     Format portfolio data for JSON file
@@ -78,12 +78,15 @@ def format_portfolio_data(
     """
     # Compute weighted returns
     weighted_returns = (stock_returns * weights).sum(axis=1)
+    expected_return = weighted_returns.mean()
+    risk = weighted_returns.var()
     # Initialise portfolio dictionary
     portfolio = {
         'Characteristics': {
             'NumberOfAssets': n,
-            'ExpectedReturn': weighted_returns.mean(),
-            'Risk': weighted_returns.var()
+            'ExpectedReturn': expected_return,
+            'Risk': risk,
+            'SharpeRatio': (expected_return - risk_free_rate) / risk,
         },
         'Stocks': {}
     }
@@ -141,13 +144,14 @@ def compute_optimal_portfolio(
         invested_capital=invested_capital,
         stock_ticker_symbols=portfolio_symbols,
         weights=optimal_weights,
-        stock_returns=returns
+        stock_returns=returns,
     )
+    # Check if the path exists
     if not os.path.exists('../data/portfolio/'):
         # Create the directory
         os.makedirs('../data/portfolio/')
     # Output data to JSON
-    with open('../data/portfolio/initial_portfolio.json', 'w') as file:
+    with open('../data/portfolio/current_portfolio.json', 'w') as file:
         json.dump(optimal_portfolio, file, indent=4)
     # Visualise portfolio
     plot_portfolio_visualisation(optimal_portfolio)

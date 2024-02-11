@@ -10,7 +10,7 @@ def fetch_stock_historical_data(
 ) -> None:
     """
     Use Yahoo Finance API to fetch stock historical data. Outputs historical data to CSV file with name SYMBOL.csv
-    :param ticker_symbol: stock ticker symbols (i.e. BNP.PA for BNP Paribas)
+    :param ticker_symbol: stock ticker symbols (i.e. MC.PA for LVMH)
     :param period: historical time period to load
     """
     # Fetching stock data using Yahoo Finance API

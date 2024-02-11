@@ -1,0 +1,40 @@
+{
+    "Characteristics": {
+        "NumberOfAssets": 5,
+        "ExpectedReturn": 0.2206506643021454,
+        "Risk": 0.39236046658391677,
+        "SharpeRatio": 0.5621582271591342
+    },
+    "Stocks": {
+        "GTBP.PA": {
+            "CompanyName": "GT Biopharma, Inc.",
+            "Weight": 0.10000003424319331,
+            "Amount": 10000.003424319331,
+            "Shares": 35
+        },
+        "MLCOT.PA": {
+            "CompanyName": "Gour Medical SA",
+            "Weight": 0.31219846773648435,
+            "Amount": 31219.846773648434,
+            "Shares": 624396
+        },
+        "FALG.PA": {
+            "CompanyName": "Fermentalg SA",
+            "Weight": 0.3877943148877902,
+            "Amount": 38779.43148877902,
+            "Shares": 46553
+        },
+        "MLFTI.PA": {
+            "CompanyName": "France Tourisme Immobilier SA",
+            "Weight": 0.10000431987227845,
+            "Amount": 10000.431987227845,
+            "Shares": 333347
+        },
+        "MLAAT.PA": {
+            "CompanyName": "Azorean Aquatic Technologies, S.A.",
+            "Weight": 0.1000028632602541,
+            "Amount": 10000.286326025409,
+            "Shares": 181823
+        }
+    }
+}
