@@ -1,40 +1,45 @@
 {
     "Characteristics": {
         "NumberOfAssets": 5,
-        "ExpectedReturn": 0.2206506643021454,
-        "Risk": 0.39236046658391677,
-        "SharpeRatio": 0.5621582271591342
+        "ExpectedReturn": 0.059196852649042044,
+        "Risk": 0.008567783441331616,
+        "SharpeRatio": 6.8996669971684454
     },
     "Stocks": {
-        "GTBP.PA": {
-            "CompanyName": "GT Biopharma, Inc.",
-            "Weight": 0.10000003424319331,
-            "Amount": 10000.003424319331,
-            "Shares": 35
-        },
         "MLCOT.PA": {
             "CompanyName": "Gour Medical SA",
-            "Weight": 0.31219846773648435,
-            "Amount": 31219.846773648434,
-            "Shares": 624396
+            "Weight": 0.10000002933208733,
+            "Amount": 10000.002933208734,
+            "Shares": 200000,
+            "PricePerShare": 0.05000000074505806
         },
         "FALG.PA": {
             "CompanyName": "Fermentalg SA",
-            "Weight": 0.3877943148877902,
-            "Amount": 38779.43148877902,
-            "Shares": 46553
+            "Weight": 0.3624836098047667,
+            "Amount": 36248.36098047667,
+            "Shares": 43515,
+            "PricePerShare": 0.8330000042915344
         },
         "MLFTI.PA": {
             "CompanyName": "France Tourisme Immobilier SA",
-            "Weight": 0.10000431987227845,
-            "Amount": 10000.431987227845,
-            "Shares": 333347
+            "Weight": 0.10000030637098131,
+            "Amount": 10000.03063709813,
+            "Shares": 333334,
+            "PricePerShare": 0.029999999329447746
         },
         "MLAAT.PA": {
             "CompanyName": "Azorean Aquatic Technologies, S.A.",
-            "Weight": 0.1000028632602541,
-            "Amount": 10000.286326025409,
-            "Shares": 181823
+            "Weight": 0.23929940379899975,
+            "Amount": 23929.940379899974,
+            "Shares": 435089,
+            "PricePerShare": 0.054999999701976776
+        },
+        "MLGEQ.PA": {
+            "CompanyName": "Gentlemen's Equity S.A.",
+            "Weight": 0.19821665069317168,
+            "Amount": 19821.66506931717,
+            "Shares": 943888,
+            "PricePerShare": 0.020999999716877937
         }
     }
 }

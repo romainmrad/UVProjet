@@ -1,5 +1,6 @@
 {
     "NumberOfAssets": 5,
     "Capital": 100000,
-    "RiskFreeRate": 0.000082
+    "RiskFreeRate": 0.000082,
+    "OptimisationFactor": "SharpeRatio"
 }

@@ -1,5 +1,6 @@
 import os
 import json
+from typing import Literal
 
 config_dir_path = ''
 if os.path.exists('../config/'):
@@ -21,4 +22,7 @@ with open(config_dir_path + 'portfolio_config.json', 'r') as portfolio_config:
     portfolio_config_data: dict = json.load(portfolio_config)
     n_assets: int = portfolio_config_data['NumberOfAssets']  # Number of portfolio assets
     capital: int | float = portfolio_config_data['Capital']  # Invested capital
-    risk_free_rate: float = portfolio_config_data["RiskFreeRate"]  # Risk-free rate
+    risk_free_rate: float = portfolio_config_data['RiskFreeRate']  # Risk-free rate
+    optimisation_factor: Literal['SharpeRatio', 'Risk', 'Return'] = portfolio_config_data['OptimisationFactor']
+    if optimisation_factor not in ['SharpeRatio', 'Risk', 'Return']:
+        raise ValueError(f'{optimisation_factor} is not a valid optimisation factor')

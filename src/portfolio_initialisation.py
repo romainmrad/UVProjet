@@ -4,27 +4,37 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 from scipy.optimize import minimize, Bounds, LinearConstraint
-from src.parameters import target_symbols, target_period, n_assets, capital, risk_free_rate
+from src.parameters import target_symbols, target_period, n_assets, capital, risk_free_rate, optimisation_factor
 from src.grapher import plot_portfolio_visualisation
 from src.tools import get_company_name
 
 
-def neg_sharpe_ratio(
+def compute_optimisation_factor(
         x: np.ndarray,
         stock_returns: pd.DataFrame,
+        factor: str,
         rfr: float
 ) -> float:
     """
     Compute negative Sharpe ratio for a portfolio of weights x
     :param x: the weights of the portfolio
     :param stock_returns: dataframe of stock daily returns
+    :param factor: the factor to optimise. Values are 'SharpeRatio', 'Risk' and 'Return'
     :param rfr: risk-free rate for ratio computing
     :return: negative sharpe ratio
     """
     weighted_returns = (stock_returns * x).sum(axis=1)
-    expected_return = weighted_returns.mean()
-    risk = weighted_returns.var()
-    return - (expected_return - rfr) / risk
+    match factor:
+        case 'SharpeRatio':
+            expected_return = weighted_returns.mean()
+            risk = weighted_returns.var()
+            return - (expected_return - rfr) / risk
+        case 'Risk':
+            return weighted_returns.var()
+        case 'Return':
+            return - weighted_returns.mean()
+        case _:
+            raise ValueError(f'{factor} is not a valid optimisation factor')
 
 
 def fetch_stocks_returns(
@@ -104,6 +114,8 @@ def format_portfolio_data(
         current_closing_price = yf.download(symbol, period='1D')['Adj Close'].values[0]
         # Compute number of shares
         portfolio['Stocks'][symbol]['Shares'] = int((weight * invested_capital) // current_closing_price)
+        # Adding share price
+        portfolio['Stocks'][symbol]['PricePerShare'] = current_closing_price
     return portfolio
 
 
@@ -129,11 +141,11 @@ def compute_optimal_portfolio(
     linear_constraint = LinearConstraint(np.ones(n), lb=1, ub=1)
     # Solve optimisation problem
     optimisation = minimize(
-        fun=neg_sharpe_ratio,
+        fun=compute_optimisation_factor,
         x0=weights,
         method='trust-constr',
         constraints=linear_constraint,
-        args=(returns, risk_free_rate),
+        args=(returns, optimisation_factor, risk_free_rate),
         bounds=weight_bounds
     )
     optimal_weights = optimisation.x
