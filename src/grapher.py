@@ -11,14 +11,14 @@ def plot_portfolio_visualisation(portfolio_data: dict) -> None:
     :param portfolio_data: portfolio data
     """
     portfolio_stock_data = {
-        'Company': [],
-        'Amount': [],
-        'Shares': []
+        'company': [],
+        'investedCapital': [],
+        'shares': []
     }
-    for stock, stock_data in portfolio_data['Stocks'].items():
-        portfolio_stock_data['Company'].append(get_company_name(stock))
-        portfolio_stock_data['Amount'].append(round(stock_data['Amount'], 2))
-        portfolio_stock_data['Shares'].append(stock_data['Shares'])
+    for stock, stock_data in portfolio_data['stocks'].items():
+        portfolio_stock_data['company'].append(get_company_name(stock))
+        portfolio_stock_data['investedCapital'].append(round(stock_data['investedCapital'], 2))
+        portfolio_stock_data['shares'].append(stock_data['shares'])
 
     df = pd.DataFrame(portfolio_stock_data)
     # Plotting
@@ -28,20 +28,20 @@ def plot_portfolio_visualisation(portfolio_data: dict) -> None:
     # Pie chart for the Amount column
     plt.subplot(1, 2, 1)
     plt.pie(
-        df['Amount'],
-        labels=df['Company'],
-        autopct=lambda x: '{:.0f}€'.format(x*df['Amount'].sum()/100),
+        df['investedCapital'],
+        labels=df['company'],
+        autopct=lambda x: '{:.0f}€'.format(x*df['investedCapital'].sum()/100),
         colors=colors,
         startangle=90
     )
-    plt.title('Portfolio Composition by Amount', fontweight='bold')
+    plt.title('Portfolio Composition by Capital', fontweight='bold')
 
     # Pie chart for the Shares column
     plt.subplot(1, 2, 2)
     plt.pie(
-        df['Shares'],
-        labels=df['Company'],
-        autopct=lambda x: '{:.0f}'.format(x * df['Shares'].sum() / 100),
+        df['shares'],
+        labels=df['company'],
+        autopct=lambda x: '{:.0f}'.format(x * df['shares'].sum() / 100),
         colors=colors,
         startangle=90
     )

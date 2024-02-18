@@ -1,45 +1,62 @@
 {
-    "Characteristics": {
-        "NumberOfAssets": 5,
-        "ExpectedReturn": 0.059196852649042044,
-        "Risk": 0.008567783441331616,
-        "SharpeRatio": 6.8996669971684454
+    "characteristics": {
+        "numberOfAssets": 5,
+        "expectedReturn": 0.015051626373238402,
+        "risk": 0.0001872174929960002,
+        "sharpeRatio": 79.95848108893446,
+        "investedCapital": 100000,
+        "currency": "Euro"
     },
-    "Stocks": {
-        "MLCOT.PA": {
-            "CompanyName": "Gour Medical SA",
-            "Weight": 0.10000002933208733,
-            "Amount": 10000.002933208734,
-            "Shares": 200000,
-            "PricePerShare": 0.05000000074505806
+    "stocks": {
+        "BLV.PA": {
+            "companyName": "BELIEVE",
+            "pricePerShare": 14.779999732971191,
+            "return": 0.019198412507445792,
+            "risk": 0.0020824918228684883,
+            "sharpeRatio": 9.179585868008,
+            "investedCapital": 19192.73461812339,
+            "weight": 0.19192734618123392,
+            "shares": 1298
         },
-        "FALG.PA": {
-            "CompanyName": "Fermentalg SA",
-            "Weight": 0.3624836098047667,
-            "Amount": 36248.36098047667,
-            "Shares": 43515,
-            "PricePerShare": 0.8330000042915344
+        "GBT.PA": {
+            "companyName": "GUERBET",
+            "pricePerShare": 29.0,
+            "return": 0.01902826679550038,
+            "risk": 0.0012743524398278275,
+            "sharpeRatio": 14.867368087010634,
+            "investedCapital": 16496.227316096134,
+            "weight": 0.16496227316096135,
+            "shares": 568
         },
-        "MLFTI.PA": {
-            "CompanyName": "France Tourisme Immobilier SA",
-            "Weight": 0.10000030637098131,
-            "Amount": 10000.03063709813,
-            "Shares": 333334,
-            "PricePerShare": 0.029999999329447746
+        "ES.PA": {
+            "companyName": "ESSO",
+            "pricePerShare": 71.5999984741211,
+            "return": 0.01731113740707424,
+            "risk": 0.0010617320664467276,
+            "sharpeRatio": 16.227387258571333,
+            "investedCapital": 15519.277154826483,
+            "weight": 0.15519277154826483,
+            "shares": 216
         },
-        "MLAAT.PA": {
-            "CompanyName": "Azorean Aquatic Technologies, S.A.",
-            "Weight": 0.23929940379899975,
-            "Amount": 23929.940379899974,
-            "Shares": 435089,
-            "PricePerShare": 0.054999999701976776
+        "VU.PA": {
+            "companyName": "VusionGroup",
+            "pricePerShare": 155.0,
+            "return": 0.011411311880826624,
+            "risk": 0.0008339408338602348,
+            "sharpeRatio": 13.58527058614493,
+            "investedCapital": 27624.106455113888,
+            "weight": 0.2762410645511389,
+            "shares": 178
         },
-        "MLGEQ.PA": {
-            "CompanyName": "Gentlemen's Equity S.A.",
-            "Weight": 0.19821665069317168,
-            "Amount": 19821.66506931717,
-            "Shares": 943888,
-            "PricePerShare": 0.020999999716877937
+        "NK.PA": {
+            "companyName": "IMERYS",
+            "pricePerShare": 32.15999984741211,
+            "return": 0.011286765546629956,
+            "risk": 0.0008857432260830766,
+            "sharpeRatio": 12.65012840818387,
+            "investedCapital": 21167.65445584009,
+            "weight": 0.21167654455840088,
+            "shares": 658
         }
     }
 }

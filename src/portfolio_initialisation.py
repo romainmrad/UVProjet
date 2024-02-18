@@ -4,7 +4,8 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 from scipy.optimize import minimize, Bounds, LinearConstraint
-from src.parameters import target_symbols, target_period, n_assets, capital, risk_free_rate, optimisation_factor
+from src.parameters import (target_symbols, target_period, n_assets, capital, risk_free_rate, optimisation_factor,
+                            minimum_share_price)
 from src.grapher import plot_portfolio_visualisation
 from src.tools import get_company_name
 
@@ -25,13 +26,13 @@ def compute_optimisation_factor(
     """
     weighted_returns = (stock_returns * x).sum(axis=1)
     match factor:
-        case 'SharpeRatio':
+        case 'sharpeRatio':
             expected_return = weighted_returns.mean()
             risk = weighted_returns.var()
             return - (expected_return - rfr) / risk
-        case 'Risk':
+        case 'risk':
             return weighted_returns.var()
-        case 'Return':
+        case 'return':
             return - weighted_returns.mean()
         case _:
             raise ValueError(f'{factor} is not a valid optimisation factor')
@@ -48,6 +49,8 @@ def fetch_stocks_returns(
     :return: Dataframe containing historical adjusted close price for all ticker symbols
     """
     stock_data = yf.download(stock_ticker_symbols, period=period)['Adj Close']
+    stocks_to_keep = [col for col in stock_data.columns if stock_data[col].iloc[0] >= minimum_share_price]
+    stock_data = stock_data[stocks_to_keep]
     stock_data.sort_values(by='Date', ascending=False, inplace=True)
     return stock_data.pct_change(periods=-1)[:-1].dropna(axis=1)
 
@@ -92,30 +95,35 @@ def format_portfolio_data(
     risk = weighted_returns.var()
     # Initialise portfolio dictionary
     portfolio = {
-        'Characteristics': {
-            'NumberOfAssets': n,
-            'ExpectedReturn': expected_return,
-            'Risk': risk,
-            'SharpeRatio': (expected_return - risk_free_rate) / risk,
+        'characteristics': {
+            'numberOfAssets': n,
+            'expectedReturn': expected_return,
+            'risk': risk,
+            'sharpeRatio': (expected_return - risk_free_rate) / risk,
+            'investedCapital': invested_capital,
+            'currency': 'Euro'
         },
-        'Stocks': {}
+        'stocks': {}
     }
 
     # Iterate over portfolio stocks
     for symbol, weight in zip(stock_ticker_symbols, weights):
-        portfolio['Stocks'][symbol] = {}
-        # Add company name
-        portfolio['Stocks'][symbol]['CompanyName'] = get_company_name(symbol)
-        # Add weight
-        portfolio['Stocks'][symbol]['Weight'] = weight
-        # Add amount invested
-        portfolio['Stocks'][symbol]['Amount'] = weight * invested_capital
-        # Fetch current closing price
-        current_closing_price = yf.download(symbol, period='1D')['Adj Close'].values[0]
-        # Compute number of shares
-        portfolio['Stocks'][symbol]['Shares'] = int((weight * invested_capital) // current_closing_price)
-        # Adding share price
-        portfolio['Stocks'][symbol]['PricePerShare'] = current_closing_price
+        # Initialising stock dictionary
+        portfolio['stocks'][symbol] = {}
+        # Computing stock characteristics
+        current_closing_price = yf.download(symbol, period='1D')['Adj Close'].values[0]  # Fetch current closing price
+        current_expected_return = stock_returns[symbol].mean()
+        current_expected_risk = stock_returns[symbol].var()
+        current_sharpe_ratio = (current_expected_return - risk_free_rate) / current_expected_risk
+        # Adding data
+        portfolio['stocks'][symbol]['companyName'] = get_company_name(symbol)  # Stock company name
+        portfolio['stocks'][symbol]['pricePerShare'] = current_closing_price  # Stock adjusted closing price
+        portfolio['stocks'][symbol]['return'] = current_expected_return  # Stock return
+        portfolio['stocks'][symbol]['risk'] = current_expected_risk  # Stock risk
+        portfolio['stocks'][symbol]['sharpeRatio'] = current_sharpe_ratio  # Stock Sharpe Ratio
+        portfolio['stocks'][symbol]['investedCapital'] = weight * invested_capital  # Capital invested in company
+        portfolio['stocks'][symbol]['weight'] = weight  # Stock weight
+        portfolio['stocks'][symbol]['shares'] = int((weight * invested_capital) // current_closing_price)  # n Shares
     return portfolio
 
 
@@ -146,7 +154,7 @@ def compute_optimal_portfolio(
         method='trust-constr',
         constraints=linear_constraint,
         args=(returns, optimisation_factor, risk_free_rate),
-        bounds=weight_bounds
+        bounds=weight_bounds,
     )
     optimal_weights = optimisation.x
 

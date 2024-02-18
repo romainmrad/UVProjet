@@ -8,8 +8,11 @@ def get_company_name(ticker_symbol):
         # Get the info dictionary for the ticker
         info = ticker.info
         # Extract the company name
-        company_name = info['longName']
-        return company_name
+        if 'shortName' in info.keys():
+            return info['shortName']
+        elif 'longName' in info.keys():
+            return info['longName']
+        return None
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error: {e} for {ticker_symbol}")
         return None
