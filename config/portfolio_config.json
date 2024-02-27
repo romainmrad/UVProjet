@@ -1,7 +1,5 @@
 {
     "numberOfAssets": 5,
     "capital": 100000,
-    "riskFreeRate": 0.000082,
-    "optimisationFactor": "sharpeRatio",
-    "minimumSharePrice": 5
+    "optimisationFactor": "sharpeRatio"
 }

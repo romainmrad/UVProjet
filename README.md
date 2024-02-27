@@ -16,18 +16,21 @@ chartist profitability prediction.
 
 ```
 UVProjet/
+├── config/
+│   ├── market_config.json
+│   └── portfolio_config.json
 ├── data/
-│   └── historical
+│   └── portfolio
 ├── docs/
 │   └── sequence_diagram/
 │       ├── sequence.puml
 │       └── sequence.svg
 ├── graphs/
-├── logs/
 ├── src/
-│   ├── data_handler.py
+│   ├── portfolio_initialisation.py
+│   ├── portfolio_evaluation.py
+│   ├── grapher.py
 │   └── parameters.py
-├── tests/
 ├── README.md
 ├── requirements.txt
 └── .gitignore

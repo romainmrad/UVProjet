@@ -1,62 +1,61 @@
 {
     "characteristics": {
         "numberOfAssets": 5,
-        "expectedReturn": 0.015051626373238402,
-        "risk": 0.0001872174929960002,
-        "sharpeRatio": 79.95848108893446,
-        "investedCapital": 100000,
-        "currency": "Euro"
+        "return": 0.01698286779908889,
+        "risk": 0.00025833409556409953,
+        "sharpeRatio": 65.42252102721508,
+        "capital": 100000
     },
     "stocks": {
-        "BLV.PA": {
-            "companyName": "BELIEVE",
-            "pricePerShare": 14.779999732971191,
-            "return": 0.019198412507445792,
-            "risk": 0.0020824918228684883,
-            "sharpeRatio": 9.179585868008,
-            "investedCapital": 19192.73461812339,
-            "weight": 0.19192734618123392,
-            "shares": 1298
-        },
         "GBT.PA": {
             "companyName": "GUERBET",
-            "pricePerShare": 29.0,
-            "return": 0.01902826679550038,
-            "risk": 0.0012743524398278275,
-            "sharpeRatio": 14.867368087010634,
-            "investedCapital": 16496.227316096134,
-            "weight": 0.16496227316096135,
-            "shares": 568
+            "pricePerShare": 29.100000381469727,
+            "return": 0.018742412530381832,
+            "risk": 0.001465064599594947,
+            "sharpeRatio": 12.736921317695455,
+            "capital": 10000.001274069693,
+            "weight": 0.10000001274069693,
+            "shares": 343
         },
         "ES.PA": {
             "companyName": "ESSO",
-            "pricePerShare": 71.5999984741211,
-            "return": 0.01731113740707424,
-            "risk": 0.0010617320664467276,
-            "sharpeRatio": 16.227387258571333,
-            "investedCapital": 15519.277154826483,
-            "weight": 0.15519277154826483,
-            "shares": 216
+            "pricePerShare": 78.6500015258789,
+            "return": 0.01830447269245893,
+            "risk": 0.0011123111540729841,
+            "sharpeRatio": 16.382531655583186,
+            "capital": 32300.719491012707,
+            "weight": 0.3230071949101271,
+            "shares": 410
         },
-        "VU.PA": {
-            "companyName": "VusionGroup",
-            "pricePerShare": 155.0,
-            "return": 0.011411311880826624,
-            "risk": 0.0008339408338602348,
-            "sharpeRatio": 13.58527058614493,
-            "investedCapital": 27624.106455113888,
-            "weight": 0.2762410645511389,
-            "shares": 178
+        "BLV.PA": {
+            "companyName": "BELIEVE",
+            "pricePerShare": 14.739999771118164,
+            "return": 0.017203596141354794,
+            "risk": 0.0021225850921005665,
+            "sharpeRatio": 8.06638857734123,
+            "capital": 21818.70554645358,
+            "weight": 0.21818705546453582,
+            "shares": 1480
         },
-        "NK.PA": {
-            "companyName": "IMERYS",
-            "pricePerShare": 32.15999984741211,
-            "return": 0.011286765546629956,
-            "risk": 0.0008857432260830766,
-            "sharpeRatio": 12.65012840818387,
-            "investedCapital": 21167.65445584009,
-            "weight": 0.21167654455840088,
-            "shares": 658
+        "LBIRD.PA": {
+            "companyName": "LUMIBIRD",
+            "pricePerShare": 14.279999732971191,
+            "return": 0.015433062094891798,
+            "risk": 0.0008850796188929212,
+            "sharpeRatio": 17.344272500696913,
+            "capital": 25575.06785398339,
+            "weight": 0.2557506785398339,
+            "shares": 1790
+        },
+        "EDI.PA": {
+            "companyName": "MEDIA 6",
+            "pricePerShare": 10.800000190734863,
+            "return": 0.014511969275259566,
+            "risk": 0.0030156466927767963,
+            "sharpeRatio": 4.785033110749623,
+            "capital": 10305.50583448063,
+            "weight": 0.1030550583448063,
+            "shares": 954
         }
     }
 }

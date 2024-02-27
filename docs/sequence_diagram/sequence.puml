@@ -13,94 +13,53 @@ title Project UML Diagram
 
 
 database "YFinance API" #3D8B7F
-participant "Data Handler" #White
 database "Local data" #SteelBlue
+participant Config #White
 participant Computation #White
 participant Prediction #White
-participant Grapher #White
+participant Decision #White
 collections Plots #GoldenRod
-collections Logs #GoldenRod
 
 
-group Data Fetching
-"Data Handler"->"YFinance API": Send query to API
-activate "Data Handler" #LightSlateGrey
-activate "YFinance API" #LightSlateGrey
-"YFinance API"->"Data Handler": Return stock data
-deactivate "YFinance API"
-end
-
-
-autonumber stop
-"Data Handler"-->>Logs
-autonumber resume
-
-
-group Data Pre-processing
-"Data Handler"->"Data Handler": Filter data
-"Data Handler"->"Data Handler": Reduce data
-"Data Handler"->"Local data": Out pre-processed \n data to CSV
-deactivate "Data Handler"
-activate "Local data" #LightSlateGrey
-end
-
-
-autonumber stop
-"Data Handler"-->>Logs
-autonumber resume
-
-
-"Local data"->Computation: Load data
-group Data Computing
-deactivate "Local data"
+group Portfolio initialisation
 activate Computation #LightSlateGrey
-Computation->Computation: Compute stock \n profitability
-Computation->Computation: Compute portfolio \n Sharpe Ratio
-end
-Computation->"Local data": Out computed data \n to JSON
+Computation <-> "YFinance API": Fetch market data
+Computation <-> Config: Load \nconfiguration
+Computation -> Computation: Compute most \nperforming stocks
+Computation -> Computation: Solve constrained\noptimisation \nproblem
+Computation -> "Local data": Output currrent \nportfolio to JSON
+Plots <-> Computation: Plot current \nportfolio
 deactivate Computation
-activate "Local data" #LightSlateGrey
+end
 
 
-
-autonumber stop
-Computation-->>Logs
-autonumber resume
-
-
-"Local data"->Prediction: Load data
-group Data Prediction
-deactivate "Local data"
+group Portfolio evaluation
+Prediction <-> "Local data": Load current portfolio data
 activate Prediction #LightSlateGrey
-Prediction->Prediction: Predict current\n portfolio profitability
-Prediction->Prediction: Predict other stocks \n profitability
-Prediction->Prediction: Recommend \n trading action
+Prediction -> Prediction: Predict portfolio \nstock prices
+alt #LightGreen Bullish portfolio
+    Prediction -->Prediction: Return current\nPortfolio
+else #Pink Bearish stocks in portfolio
+    Prediction -> Prediction: Predict other\nstocks
+    Prediction -> Prediction: Suggest new\ninvestment
+    Prediction -> "Local data": Output suggestion to JSON
 end
-Prediction->"Local data": Out predicted data \n to JSON
 deactivate Prediction
-activate "Local data" #LightSlateGrey
-
-
-autonumber stop
-Prediction-->>Logs
-autonumber resume
-
-
-"Local data"->Grapher: Load data
-deactivate "Local data"
-group Data Visualisation
-activate Grapher #LightSlateGrey
-Grapher->Plots: Plot portfolio \n distribution
-Grapher->Plots: Plot candlestick graph \n for portfolio stocks
 end
-deactivate Grapher
 
 
-autonumber stop
-Grapher-->>Logs
-autonumber resume
-
-
+group Decision-making
+Decision <-> "Local data": Load investment suggestion
+activate Decision #LightSlateGrey
+alt #LightGreen Act on suggestion
+    Decision -> Decision: Modify current \nportfolio
+    Decision -> "Local data": Output new portfolio to JSON
+    Plots <-> Decision: Plot new \nportfolio
+else #Pink Stay on current portfolio
+    Decision --> Decision: Return current\nportfolio
+end
+deactivate Decision
+end
 @enduml
 
 @startuml

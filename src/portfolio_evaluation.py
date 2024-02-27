@@ -1,6 +1,6 @@
 import json
 import os
-from src.parameters import optimisation_factor
+import yfinance as yf
 
 
 def load_current_portfolio_data() -> dict:
@@ -21,35 +21,26 @@ def load_current_portfolio_data() -> dict:
     return portfolio_data
 
 
-def compute_least_performing_stock(portfolio_data: dict) -> str:
+def estimate_stock_movement(stock_data) -> float:
+    pass
+
+
+def estimate_bearish_stocks(portfolio_data: dict):
     """
-    Compute least-performing stock in current portfolio
+    Estimate bearish stocks in current portfolio
     :param portfolio_data: dictionary containing current portfolio data
-    :return: least-performing stock ticker symbol
+    :return: list of ticker symbols for bearish stocks in current portfolio
     """
-    if optimisation_factor == 'SharpeRatio' or optimisation_factor == 'ExpectedReturn':
-        # Initialise search
-        min_factor_value = float('inf')
-        min_factor_symbol = None
-        # Iterate over portfolio stocks
-        for symbol, stock_data in portfolio_data['Stocks'].items():
-            current_value = stock_data[optimisation_factor]
-            # Update minimum value
-            if current_value < min_factor_value:
-                min_factor_value = current_value
-                min_factor_symbol = symbol
-        # Return least-performing stock ticker symbol
-        return min_factor_symbol
-    elif optimisation_factor == 'Risk':
-        # Initialise search
-        max_factor_value = -float('inf')
-        max_factor_symbol = None
-        # Iterate over portfolio stocks
-        for symbol, stock_data in portfolio_data['Stocks'].items():
-            current_value = stock_data[optimisation_factor]
-            # Update minimum value
-            if current_value > max_factor_value:
-                max_factor_value = current_value
-                max_factor_symbol = symbol
-        # Return least-performing stock ticker symbol
-        return max_factor_symbol
+    stock_data = {}
+    bearish_stocks = []
+    for ticker in portfolio_data['stocks'].keys():
+        stock_data[ticker] = {}
+        stock_data[ticker]['data'] = yf.download(tickers=ticker, period='5y')['Adj Close'].pct_change(periods=-1)[:-1]
+        stock_data[ticker]['data'] = stock_data[ticker]['data'].fillna(method='interpolate', axis=0)
+        stock_data[ticker]['estimatedPrice'] = estimate_stock_movement(stock_data[ticker]['data'])
+        if stock_data[ticker]['estimatedPrice'] > stock_data[ticker]['data'][-1]:
+            stock_data[ticker]['movementType'] = 'bull'
+        elif stock_data[ticker]['estimatedPrice'] - stock_data[ticker]['data'][-1] <= 5:
+            stock_data[ticker]['movementType'] = 'bear'
+            bearish_stocks.append(ticker)
+    return bearish_stocks
