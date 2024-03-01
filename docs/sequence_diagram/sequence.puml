@@ -12,13 +12,13 @@ autonumber
 title Project UML Diagram
 
 
-database "YFinance API" #3D8B7F
+database "YFinance API" #720E9E
 database "Local data" #SteelBlue
 participant Config #White
 participant Computation #White
 participant Prediction #White
 participant Decision #White
-collections Plots #GoldenRod
+collections Graphs #GoldenRod
 
 
 group Portfolio initialisation
@@ -28,7 +28,7 @@ Computation <-> Config: Load \nconfiguration
 Computation -> Computation: Compute most \nperforming stocks
 Computation -> Computation: Solve constrained\noptimisation \nproblem
 Computation -> "Local data": Output currrent \nportfolio to JSON
-Plots <-> Computation: Plot current \nportfolio
+Graphs <-> Computation: Plot current \nportfolio
 deactivate Computation
 end
 
@@ -38,7 +38,7 @@ Prediction <-> "Local data": Load current portfolio data
 activate Prediction #LightSlateGrey
 Prediction -> Prediction: Predict portfolio \nstock prices
 alt #LightGreen Bullish portfolio
-    Prediction -->Prediction: Return current\nPortfolio
+    Prediction ->Prediction: Return current\nPortfolio
 else #Pink Bearish stocks in portfolio
     Prediction -> Prediction: Predict other\nstocks
     Prediction -> Prediction: Suggest new\ninvestment
@@ -54,9 +54,9 @@ activate Decision #LightSlateGrey
 alt #LightGreen Act on suggestion
     Decision -> Decision: Modify current \nportfolio
     Decision -> "Local data": Output new portfolio to JSON
-    Plots <-> Decision: Plot new \nportfolio
+    Graphs <-> Decision: Plot new \nportfolio
 else #Pink Stay on current portfolio
-    Decision --> Decision: Return current\nportfolio
+    Decision -> Decision: Return current\nportfolio
 end
 deactivate Decision
 end

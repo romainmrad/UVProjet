@@ -1,78 +1,206 @@
+import os
 import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+from typing import Literal
+from datetime import datetime
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
-from sklearn.metrics import r2_score
+from keras.utils import plot_model
+from sklearn.metrics import r2_score, mean_squared_error
+
+from src.parameters import prediction_metric
 
 
-def split_data(dataset, time_step):
+def split_data(
+        dataset: pd.DataFrame,
+        lookback: int
+) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Split dataset into values and labels
+    :param dataset: the data to split
+    :param lookback: the number of days to consider as training data
+    :return: X and y
+    """
     x_data, y_data = [], []
-    for i in range(len(dataset) - time_step - 1):
-        x_data.append(dataset[i:(i + time_step), 0])
-        y_data.append(dataset[i + time_step, 0])
+    for i in range(len(dataset) - lookback - 1):
+        x_data.append(dataset[i:i + lookback, 0])
+        y_data.append(dataset[i + lookback, 0])
     return np.array(x_data), np.array(y_data)
 
 
-def train_test_split(dataset, time_step, train_size=0.7):
+def train_test_split(
+        dataset: pd.DataFrame,
+        lookback: int,
+        train_size: float = 0.7
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Split dataset into training and testing
+    :param dataset: the data to split
+    :param lookback: the number of days to consider as training data
+    :param train_size: size of training data (in percentage)
+    :return: x_train, x_test, y_train, y_test
+    """
     # Computing split index based on train size
     split_index = int(len(dataset) * train_size)
     # Splitting train data and test data
     train_data, test_data = dataset[0:split_index, :], dataset[split_index:len(dataset), :]
     # Splitting each dataset into train and test
-    x_train, y_train = split_data(dataset=train_data, time_step=time_step)
-    x_test, y_test = split_data(dataset=test_data, time_step=time_step)
+    x_train, y_train = split_data(dataset=train_data, lookback=lookback)
+    x_test, y_test = split_data(dataset=test_data, lookback=lookback)
     # Returning datasets
     return x_train, x_test, y_train, y_test
 
 
-def model_selection(
-        models_dict: dict[str, dict[str, Sequential | float]]
-) -> Sequential:
-    """
-    Finds the best model and returns it
-    :param models_dict: dictionary of models
-    :return: best model
-    """
-    best_model = None
-    closest_to_1_diff = float('inf')  # Initialize with positive infinity
-
-    for model_name, model_info in models_dict.items():
-        score = model_info["r2_score"]
-        diff_to_1 = abs(1 - score)
-
-        if diff_to_1 < closest_to_1_diff:
-            closest_to_1_diff = diff_to_1
-            best_model = model_info['model']
-
-    return best_model
-
-
 def model_evaluation(
-        x_train: np.ndarray,
-        y_train: np.ndarray,
-        x_test: np.ndarray,
-        y_test: np.ndarray
-) -> Sequential:
+        y_true: np.ndarray,
+        y_pred: np.ndarray
+) -> float:
     """
-    Select the best Sequential model
+    Evaluates the model based on stock movement
+    :param y_true: True stock values
+    :param y_pred: Predicted stock values
+    :return: Metric
+    """
+    # Initialising counter to 0
+    count = 0
+    for i in range(1, len(y_pred)):
+        # If true value was bullish and predicted value is bullish
+        if y_true[i] > y_true[i - 1] and y_pred[i] > y_true[i - 1]:
+            # Increment counter
+            count += 1
+        # If true value was bearish and predicted value is bearish
+        elif y_true[i] < y_true[i - 1] and y_pred[i] < y_true[i - 1]:
+            # Increment counter
+            count += 1
+    # Return percentage of correct movements in all predictions
+    return count / len(y_pred)
+
+
+def model_selection(
+        ticker: str,
+        x_train: np.ndarray,
+        x_test: np.ndarray,
+        y_train: np.ndarray,
+        y_test: np.ndarray,
+        metric: Literal['r2_score', 'direction', 'mean_squared_error'],
+        show_plots: bool = False
+) -> tuple[Sequential, np.ndarray, float] | tuple[None, None, None]:
+    """
+    Test multiple sequential sequential_models and returns the best performing one
+    :param ticker: Stock ticker symbol
     :param x_train: training data
     :param y_train: training labels
     :param x_test: testing data
     :param y_test: testing labels
+    :param metric: Metric to test
+    :param show_plots: Whether to show the plots
     :return: best model
     """
-    models = dict()
-    for n_models in range(4):
+    # Initialising search
+    if metric in ['r2_score', 'direction']:
+        best_movement_estimation = 0
+    elif metric == 'mean_squared_error':
+        best_movement_estimation = 1
+    best_model = None
+    best_model_predictions = None
+    # Iterating over number of sequential_models
+    print(f'Starting model selection for {ticker}:')
+    for n_models in range(5):
+        # Instantiating model
         model = Sequential()
+        model._name = f'model_{n_models}'
+        # Adding corresponding layers
         model.add(LSTM(units=50, return_sequences=True, input_shape=(x_train.shape[1], 1)))
         for n_layers in range(n_models):
             model.add(LSTM(units=50, return_sequences=True))
         model.add(LSTM(units=50))
         model.add(Dense(units=1))
+        # Compiling model
         model.compile(loss='mean_squared_error', optimizer='adam')
-        model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=100, batch_size=64, verbose=True)
-        predictions = model.predict(x_test)
-        models[f'Model-{n_models}'] = dict()
-        models[f'Model-{n_models}']['model'] = model
-        models[f'Model-{n_models}']['r2_score'] = r2_score(y_test, predictions)
-    return model_selection(models)
+        print(f'model_{n_models} -> created')
+        # Fitting model to data
+        model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=100, batch_size=64, verbose=False)
+        print(f'model_{n_models} -> fitted')
+        # Predicting test data and evaluating model
+        y_pred = model.predict(x=x_test, verbose=False)
+        if metric == 'r2_score':
+            current_model_performance = r2_score(y_true=y_test.flatten(), y_pred=y_pred.flatten())
+        elif metric == 'direction':
+            current_model_performance = model_evaluation(y_true=y_test.flatten(), y_pred=y_pred.flatten())
+        elif metric == 'mean_squared_error':
+            current_model_performance = mean_squared_error(y_true=y_test.flatten(), y_pred=y_pred.flatten())
+        if show_plots:
+            plot_prediction(
+                ticker=ticker,
+                model=model,
+                y_true=y_test.flatten(),
+                y_pred=y_pred.flatten(),
+                show=True,
+                score=current_model_performance
+            )
+        print(f'model_{n_models} -> Score: {current_model_performance:.5f}')
+        print('-------------------------')
+        if metric in ['r2_score', 'direction']:
+            # Storing best performing model
+            if best_movement_estimation < current_model_performance <= 1:
+                best_movement_estimation = current_model_performance
+                best_model = model
+                best_model._name = model.name
+                best_model_predictions = y_pred
+        elif metric == 'mean_squared_error':
+            if 0 <= current_model_performance < best_movement_estimation:
+                best_movement_estimation = current_model_performance
+                best_model = model
+                best_model._name = model.name
+                best_model_predictions = y_pred
+    # Returning best performing model
+    if best_model is not None:
+        print(f'Selected: {best_model.name} Score: {best_movement_estimation:2f}')
+        # Plot the model
+        plot_model(
+            model=best_model,
+            to_file=f'../graphs/sequential_models/{ticker}.png',
+            show_shapes=True,
+            show_layer_names=True,
+            expand_nested=True,
+            show_layer_activations=True
+        )
+        return best_model, best_model_predictions, best_movement_estimation
+    return None, None, None
 
+
+def plot_prediction(
+        ticker: str,
+        model: Sequential,
+        y_true: np.ndarray,
+        y_pred: np.ndarray,
+        score: float,
+        show: bool = False
+) -> None:
+    """
+    Plots the predictions of the stock values
+    :param ticker: Stock ticker symbol
+    :param model: Model used for predictions
+    :param y_true: true values of the stock closing price
+    :param y_pred: predicted values of the stock closing price
+    :param score: score of the model
+    :param show: whether to show the plot or not
+    """
+    plt.figure(figsize=(20, 10))
+    sns.lineplot(x=list(range(len(y_true))), y=y_true, label='true data')
+    sns.lineplot(x=list(range(len(y_pred))), y=y_pred, label='predictions')
+    plt.title(label=f'Prediction for {ticker} by {model.name}. {prediction_metric}: {score}', fontweight='bold')
+    if not show:
+        # Check if the path exists
+        if not os.path.exists('../graphs/prediction/'):
+            # Create the directory
+            os.makedirs('../graphs/prediction/')
+        current_date = datetime.now().date().strftime('%Y-%m-%d')
+        plt.tight_layout()
+        plt.savefig(f'../graphs/prediction/{ticker}_{current_date}.png')
+        plt.close()
+    else:
+        plt.show()

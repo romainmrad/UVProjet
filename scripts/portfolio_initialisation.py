@@ -20,10 +20,7 @@ if __name__ == '__main__':
     # Computing portfolio characteristics
     pf.compute_characteristics()
     # Formatting portfolio data as JSON
-    pf_data = pf.to_dict()
-    # Output portfolio to JSON file
-    with open('../data/portfolio/current_portfolio.json', 'w') as file:
-        json.dump(pf_data, file, indent=4)
+    pf.update()
     print('Portfolio JSON file created')
     # Plotting portfolio
     pf.plot()

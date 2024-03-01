@@ -1,0 +1,102 @@
+@startuml
+
+skinparam ParticipantFontStyle bold
+skinparam DatabaseFontStyle bold
+skinparam CollectionsFontStyle bold
+skinparam BackgroundColor White
+skinparam TitleFontSize 25
+skinparam TitleFontStyle bold
+autonumber "<font color=blue><b>"
+
+
+title Portfolio Prediction
+
+
+database "YFinance API" #720E9E
+database "Local data" #SteelBlue
+participant Market #White
+participant Portfolio #White
+participant Stock #White
+collections Graphs #GoldenRod
+collections Models #3D8B7F
+collections Scalers #DodgerBlue
+
+
+group Portfolio Prediction
+Portfolio -> Portfolio: Instantiate Portfolio \nobject
+activate Portfolio #LightSlateGrey
+Portfolio <-> "Local data": Load Portfolio data
+
+loop Portfolio Stocks
+Portfolio -> Stock: Instantiate \nStock Object
+activate Stock #LightSlateGrey
+Stock <-> Models: Load fitted stock \nSequential Model
+Stock <-> Scalers: Load fitted stock \nMinMaxScaler
+Stock <-> "YFinance API": Download Stock prediction data \nusing configurated lookback value
+Stock -> Stock: Predict \nnext price
+Portfolio <-> Stock: Characterise \nStock movement
+deactivate Stock
+alt #LightGreen Bullish Stock
+Portfolio -> Portfolio: Return current \nPortfolio
+else #Pink Bearish Stock
+Portfolio <-> Stock: Remove Stock \nfrom Portfolio
+Portfolio -> Portfolio: Add Stock to \nbearish stocks \nlist
+end
+
+end
+
+end
+
+deactivate Portfolio
+
+group Market Prediction
+Market -> Market: Instantiate \n Market Object
+activate Market #LightSlateGrey
+Market -> Market: Remove Portfolio Stocks \nticker symbols from list
+loop Stocks ticker symbols
+Market -> Stock: Instantiate Stock Object
+activate Stock #LightSlateGrey
+Stock <-> Models: Load fitted stock \nSequential Model
+Stock <-> Scalers: Load fitted stock \nMinMaxScaler
+Stock <-> "YFinance API": Download Stock prediction data \nusing configurated lookback value
+Stock -> Stock: Predict \nnext price
+Market <-> Stock: Characterise \nStock movement
+deactivate Stock
+alt #LightGreen Bullish Stock
+Market -> Market: Add Stock ticker \nsymbol to bullish \nstocks list
+else #Pink Bearish Stock
+Market -> Market: Ignore Stock
+end
+
+end
+Market -> Market: Sort bullish \nmovements descending
+Market -> Portfolio: Extract \nlen(Portfolio.bearish_stocks)\nbullish stocks ticker symbols
+deactivate Market
+activate Portfolio #LightSlateGrey
+end
+
+group Portfolio Optimisation
+loop Most Bullish Stocks ticker symbols
+Portfolio -> Stock: Instantiate stock objects
+activate Stock #LightSlateGrey
+Stock <-> "YFinance API": Load data
+Stock -> Stock: Compute stock \ncharacteristics
+Stock <-> Portfolio: Add Stock object to Portfolio
+deactivate Stock
+end
+
+Portfolio -> Portfolio: Optimise weights
+loop Portfolio stocks
+Portfolio -> Stock: Set weights
+activate Stock #LightSlateGrey
+Stock -> Stock: Compute stock \nshares and capital
+end
+Stock <-> Portfolio: Compute portfolio \ncharacteristics
+deactivate Stock
+Portfolio -> Portfolio: Generate dictionary
+Portfolio -> "Local data": Output JSON Portfolio data
+Portfolio -> Graphs: Plot portfolio
+
+end
+
+@enduml

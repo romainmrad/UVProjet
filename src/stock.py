@@ -1,39 +1,50 @@
+import json
+import joblib
 import pandas as pd
 import yfinance as yf
 import numpy as np
+
+from keras.models import load_model, Sequential
 from sklearn.preprocessing import MinMaxScaler
-from src.parameters import risk_free_rate, capital
-from src.utilities import train_test_split
+
+from src.parameters import risk_free_rate, capital, trading_fee, lookback
 
 
 class Stock(object):
     """
     Stock class
     """
+
     def __init__(
             self,
             ticker: str,
-            load_data: bool = True,
     ) -> None:
         """
         Stock constructor
         :param ticker: stock ticker symbol
-        :param load_data: whether to load the data or not
         """
         self.ticker: str = ticker
-        self.data: pd.DataFrame or None = None
-        self.price: float or None = None
-        self.expected_return: float or None = None
-        self.risk: float or None = None
-        self.sharpe_ratio: float or None = None
-        self.weight: float or None = None
-        self.capital: float or None = None
-        if load_data:
-            self.data = yf.download(self.ticker, period='1mo')['Adj Close']
-            self.price = self.data.iloc[-1]
-            self.expected_return = self.data.pct_change(periods=1).dropna().mean()
-            self.risk = self.data.pct_change(periods=1).dropna().var()
-            self.sharpe_ratio = (self.expected_return - risk_free_rate) / self.risk
+        self.data: pd.DataFrame = yf.download(self.ticker, period='1mo')['Adj Close']
+        self.price: float = self.data.iloc[-1]
+        self.expected_return: float = self.data.pct_change(periods=1).dropna().mean()
+        self.risk: float = self.data.pct_change(periods=1).dropna().var()
+        self.sharpe_ratio: float = (self.expected_return - risk_free_rate) / self.risk
+        self.weight: float | None = None
+        self.capital: float | None = None
+        self.shares: int | None = None
+
+    def __repr__(self) -> str:
+        """
+        String representation of the Stock object
+        """
+        stock_dict = {self.ticker: self.to_dict()}
+        return json.dumps(stock_dict, indent=4)
+
+    def evaluate(self):
+        """
+        Evaluates the stock value
+        """
+        self.price = yf.download(self.ticker, period='1mo')['Adj Close'].iloc[-1]
 
     def set_weight(self, weight) -> None:
         """
@@ -42,6 +53,7 @@ class Stock(object):
         """
         self.weight = weight
         self.capital = self.weight * capital
+        self.shares = int(self.capital // self.price)
 
     def get_company_name(self) -> str | None:
         try:
@@ -77,6 +89,7 @@ class Stock(object):
         s.sharpe_ratio = dictionary['sharpeRatio']
         s.capital = dictionary['capital']
         s.weight = dictionary['weight']
+        s.shares = dictionary['shares']
         return s
 
     def to_dict(self) -> dict:
@@ -95,10 +108,64 @@ class Stock(object):
         stock_dict['shares'] = int(stock_dict['capital'] // stock_dict['pricePerShare'])
         return stock_dict
 
-    def predict(self):
-        stock_data = yf.download(tickers=self.ticker, period='5y')['Adj Close']
-        stock_data.columns = [self.ticker]
+    @staticmethod
+    def get_train_data(ticker: str) -> np.ndarray:
+        stock_data = yf.download(tickers=ticker, period='5y')['Adj Close']
         stock_data.dropna(inplace=True)
-        scaler = MinMaxScaler()
-        scaled_stock_data = scaler.fit_transform(np.array(stock_data).reshape(-1, 1))
-        x_train, x_test, y_train, y_test = train_test_split(dataset=scaled_stock_data, time_step=100)
+        return stock_data.to_numpy().reshape(-1, 1)
+
+    def get_prediction_data(self) -> np.ndarray:
+        # Fetch data using Yahoo Finance API
+        stock_data = yf.download(self.ticker, period='1y')['Adj Close']
+        # Drop NA values
+        stock_data.dropna(inplace=True)
+        # Convert to numpy
+        stock_data = np.array(stock_data)[-lookback:]
+        # Return reshaped array
+        return stock_data
+
+    def load_model_and_scaler(self) -> tuple[Sequential, MinMaxScaler]:
+        """
+        Load model and scaler for current stock
+        :return: model and scaler
+        """
+        model = None
+        scaler = None
+        # Load sequential model
+        try:
+            model = load_model(f'../models/sequential/{self.ticker}.keras')
+            print(f'Model found and loaded for {self.ticker}')
+        except FileNotFoundError:
+            print(f'No model trained for {self.ticker}')
+        # Load scaler
+        try:
+            scaler = joblib.load(f'../models/scaler/{self.ticker}.save')
+            print(f'Scaler found and loaded for {self.ticker}')
+        except FileNotFoundError:
+            print(f'No scaler fitted for {self.ticker}')
+        return model, scaler
+
+    def predict(self) -> float | None:
+        """
+        Predict stock price
+        :return: predicted stock price
+        """
+        # Load model and scaler from file
+        model, scaler = self.load_model_and_scaler()
+        # If model and scaler are found
+        if model is not None and scaler is not None:
+            # Load prediction X data
+            stock_data = self.get_prediction_data()
+            # Predict price
+            prediction = model.predict(scaler.transform(stock_data.reshape(-1, 1)).reshape(1, -1), verbose=False)
+            return scaler.inverse_transform(np.array(prediction).reshape(-1, 1)).flatten()[0]
+        return None
+
+    def bearish(self):
+        """
+        Predict stock movement
+        :return: True if stock is bearish, False if bullish
+        """
+        return (self.price - self.predict()) < trading_fee
+
+

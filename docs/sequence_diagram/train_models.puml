@@ -1,0 +1,47 @@
+@startuml
+
+skinparam ParticipantFontStyle bold
+skinparam DatabaseFontStyle bold
+skinparam CollectionsFontStyle bold
+skinparam BackgroundColor White
+skinparam TitleFontSize 25
+skinparam TitleFontStyle bold
+
+autonumber "<font color=blue><b>"
+
+
+title Sequential models training
+
+
+database "YFinance API" #720E9E
+participant Market #White
+participant Stock #White
+collections Graphs #GoldenRod
+collections Models #3D8B7F
+collections Scalers #DodgerBlue
+
+
+Market -> Market: Instantiate Market
+activate Market #LightSlateGrey
+loop Ticker Symbols
+Market -> Stock: Instantiate Stock object
+activate Stock #LightSlateGrey
+Stock <-> "YFinance API": Download 5y historical data
+Stock -> Stock: Scale data
+Stock -> Market: Return data
+Market -> Market: Split data for training and testing
+loop n layers
+Market -> Market: Instantiate Sequential Model
+Market -> Market: Add n LSTM layers
+Market -> Market: Compile Sequential Model
+Market -> Market: Fit Sequential Model to training data
+Market -> Market: Evaluate Sequential Model \naccording to chosen metric
+end
+Market -> Market: Select best performing Sequential Model
+Market -> Graphs: Plot Sequential Model layers
+Market -> Graphs: Plot True and Predicted values
+Market -> Models: Save model for current stock
+Market -> Scalers: Save MinMaxScaler instance for current stock
+end
+
+@enduml

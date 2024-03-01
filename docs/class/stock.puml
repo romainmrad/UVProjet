@@ -1,0 +1,28 @@
+@startuml
+
+class Stock {
+    + ticker: str
+    + data: pd.DataFrame
+    + price: float
+    + expected_return: float
+    + risk: float
+    + sharpe_ratio: float
+    + weight: float | None
+    + capital: float | None
+    + shares: int | None
+
+    + Stock(ticker: str)
+    + __repr__(): str
+    + evaluate(): void
+    + set_weight(weight: float): void
+    + get_company_name(): str | None
+    + from_dict(ticker: str, dictionary: dict): Stock
+    + to_dict(): dict
+    + get_train_data(ticker: str): np.ndarray
+    + get_prediction_data(): np.ndarray
+    + load_model_and_scaler(): tuple[Sequential, MinMaxScaler]
+    + predict(): float | None
+    + bearish(): bool
+}
+
+@enduml

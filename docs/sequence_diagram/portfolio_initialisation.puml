@@ -1,0 +1,60 @@
+@startuml
+
+skinparam ParticipantFontStyle bold
+skinparam DatabaseFontStyle bold
+skinparam CollectionsFontStyle bold
+skinparam BackgroundColor White
+skinparam TitleFontSize 25
+skinparam TitleFontStyle bold
+autonumber "<font color=blue><b>"
+
+
+title Portfolio Initialisation
+
+
+database "YFinance API" #720E9E
+database "Local data" #SteelBlue
+participant Market #White
+participant Portfolio #White
+participant Stock #White
+collections Graphs #GoldenRod
+
+group Market Initialisation
+Market -> Market: Instantiate object
+activate Market #LightSlateGrey
+Market <-> "YFinance API": Load data
+Market -> Market: Extract top n stocks
+end
+
+group Portfolio Initialisation
+Portfolio -> Portfolio: Instantiate object
+activate Portfolio #LightSlateGrey
+Portfolio <-> Market: Get top stocks stickers
+deactivate Market
+loop Top stocks tickers
+Portfolio -> Stock: Instantiate stock objects
+activate Stock #LightSlateGrey
+Stock <-> "YFinance API": Load data
+Stock -> Stock: Compute stock \ncharacteristics
+Stock <-> Portfolio: Add Stock object to Portfolio
+deactivate Stock
+end
+
+end
+
+group Portfolio Optimisation
+Portfolio -> Portfolio: Optimise weights
+loop Portfolio stocks
+Portfolio -> Stock: Set weights
+activate Stock #LightSlateGrey
+Stock -> Stock: Compute stock \nshares and capital
+end
+Stock <-> Portfolio: Compute portfolio \ncharacteristics
+deactivate Stock
+Portfolio -> Portfolio: Generate dictionary
+Portfolio -> "Local data": Output JSON Portfolio data
+Portfolio -> Graphs: Plot portfolio
+
+deactivate Portfolio
+end
+@enduml

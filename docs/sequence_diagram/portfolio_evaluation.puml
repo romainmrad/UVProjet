@@ -1,0 +1,39 @@
+@startuml
+
+skinparam ParticipantFontStyle bold
+skinparam DatabaseFontStyle bold
+skinparam CollectionsFontStyle bold
+skinparam BackgroundColor White
+skinparam TitleFontSize 25
+skinparam TitleFontStyle bold
+autonumber "<font color=blue><b>"
+
+
+title Portfolio Evaluation
+
+
+database "YFinance API" #720E9E
+database "Local data" #SteelBlue
+participant Market #White
+participant Portfolio #White
+participant Stock #White
+collections Graphs #GoldenRod
+
+
+Portfolio -> Portfolio: Instantiate Portfolio \nobject
+activate Portfolio #LightSlateGrey
+Portfolio <-> "Local data": Load Portfolio data
+Portfolio -> Portfolio: Evaluate current value
+loop Portfolio stocks
+Portfolio <-> Stock: Evaluate stock value
+activate Stock #LightSlateGrey
+Stock <-> "YFinance API": Download current Adj Close price
+deactivate Stock
+end
+Portfolio -> "Local data": Update Portfolio data
+
+Portfolio -> "Local data": Append current \ndate and value
+Portfolio -> Graphs: Replot Portfolio value \nevolution
+deactivate Portfolio
+
+@enduml

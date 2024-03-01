@@ -1,5 +1,7 @@
 {
     "numberOfAssets": 5,
     "capital": 100000,
-    "optimisationFactor": "sharpeRatio"
+    "optimisationFactor": "sharpeRatio",
+    "minimumProportion": 0.05,
+    "lookback": 50
 }
