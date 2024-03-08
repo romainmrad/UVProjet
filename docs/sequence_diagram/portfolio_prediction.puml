@@ -17,7 +17,6 @@ database "Local data" #SteelBlue
 participant Market #White
 participant Portfolio #White
 participant Stock #White
-collections Graphs #GoldenRod
 collections Models #3D8B7F
 collections Scalers #DodgerBlue
 
@@ -27,7 +26,7 @@ Portfolio -> Portfolio: Instantiate Portfolio \nobject
 activate Portfolio #LightSlateGrey
 Portfolio <-> "Local data": Load Portfolio data
 
-loop Portfolio Stocks
+loop #LightBlue Portfolio Stocks
 Portfolio -> Stock: Instantiate \nStock Object
 activate Stock #LightSlateGrey
 Stock <-> Models: Load fitted stock \nSequential Model
@@ -37,23 +36,24 @@ Stock -> Stock: Predict \nnext price
 Portfolio <-> Stock: Characterise \nStock movement
 deactivate Stock
 alt #LightGreen Bullish Stock
-Portfolio -> Portfolio: Return current \nPortfolio
+Portfolio -> "Local data": Return current \nPortfolio
 else #Pink Bearish Stock
 Portfolio <-> Stock: Remove Stock \nfrom Portfolio
 Portfolio -> Portfolio: Add Stock to \nbearish stocks \nlist
-end
 
 end
 
 end
-
 deactivate Portfolio
+end
+
+
 
 group Market Prediction
 Market -> Market: Instantiate \n Market Object
 activate Market #LightSlateGrey
 Market -> Market: Remove Portfolio Stocks \nticker symbols from list
-loop Stocks ticker symbols
+loop #LightBlue Stocks ticker symbols
 Market -> Stock: Instantiate Stock Object
 activate Stock #LightSlateGrey
 Stock <-> Models: Load fitted stock \nSequential Model
@@ -76,7 +76,7 @@ activate Portfolio #LightSlateGrey
 end
 
 group Portfolio Optimisation
-loop Most Bullish Stocks ticker symbols
+loop #LightBlue Most Bullish Stocks ticker symbols
 Portfolio -> Stock: Instantiate stock objects
 activate Stock #LightSlateGrey
 Stock <-> "YFinance API": Load data
@@ -86,7 +86,7 @@ deactivate Stock
 end
 
 Portfolio -> Portfolio: Optimise weights
-loop Portfolio stocks
+loop #LightBlue Portfolio stocks
 Portfolio -> Stock: Set weights
 activate Stock #LightSlateGrey
 Stock -> Stock: Compute stock \nshares and capital
@@ -94,9 +94,8 @@ end
 Stock <-> Portfolio: Compute portfolio \ncharacteristics
 deactivate Stock
 Portfolio -> Portfolio: Generate dictionary
-Portfolio -> "Local data": Output JSON Portfolio data
-Portfolio -> Graphs: Plot portfolio
-
+Portfolio -> "Local data": Output suggest Portfolio data to JSON
+deactivate Portfolio
 end
 
 @enduml

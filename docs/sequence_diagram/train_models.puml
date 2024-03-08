@@ -1,5 +1,4 @@
 @startuml
-
 skinparam ParticipantFontStyle bold
 skinparam DatabaseFontStyle bold
 skinparam CollectionsFontStyle bold
@@ -23,14 +22,14 @@ collections Scalers #DodgerBlue
 
 Market -> Market: Instantiate Market
 activate Market #LightSlateGrey
-loop Ticker Symbols
+loop #LightBlue Ticker Symbols
 Market -> Stock: Instantiate Stock object
 activate Stock #LightSlateGrey
 Stock <-> "YFinance API": Download 5y historical data
 Stock -> Stock: Scale data
 Stock -> Market: Return data
 Market -> Market: Split data for training and testing
-loop n layers
+loop #LightYellow n layers
 Market -> Market: Instantiate Sequential Model
 Market -> Market: Add n LSTM layers
 Market -> Market: Compile Sequential Model

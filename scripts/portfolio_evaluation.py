@@ -3,10 +3,13 @@ from src.portfolio import Portfolio
 
 
 if __name__ == '__main__':
-    # Loading portfolio
-    with open('../data/portfolio/current_portfolio.json', 'r') as f:
-        pf = Portfolio.from_dict(json.load(f))
+    # Load current portfolio
+    pf = Portfolio.load_current_portfolio()
+    # Evaluate portfolio value and update local data and plot
     pf.evaluate()
     pf.update()
+    print('Portfolio evaluation completed')
     pf.update_evolution()
+    print('Updated portfolio evolution JSON')
     pf.plot_evolution()
+    print('Plotted portfolio evolution JSON')

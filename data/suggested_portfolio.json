@@ -1,0 +1,68 @@
+{
+    "sell": {
+        "BUR.PA": 75
+    },
+    "buy": {},
+    "suggestedPortfolio": {
+        "characteristics": {
+            "numberOfAssets": 5,
+            "return": 0.010124203105043996,
+            "risk": 0.00010704227017568682,
+            "sharpeRatio": 93.81530388473529,
+            "capital": 100000,
+            "value": 99339.94031524658
+        },
+        "stocks": {
+            "ES.PA": {
+                "companyName": "ESSO",
+                "pricePerShare": 83.0999984741211,
+                "return": 0.017164329623589814,
+                "risk": 0.0012635899631763478,
+                "sharpeRatio": 13.518886760266067,
+                "capital": 10941.632741942929,
+                "weight": 0.10941632741942929,
+                "shares": 131
+            },
+            "LIN.PA": {
+                "companyName": "LINEDATA SERVICES",
+                "pricePerShare": 74.0,
+                "return": 0.01038507253192225,
+                "risk": 0.00026671071119735196,
+                "sharpeRatio": 38.63014157049926,
+                "capital": 15888.92007656992,
+                "weight": 0.1588892007656992,
+                "shares": 214
+            },
+            "ARTO.PA": {
+                "companyName": "ARTOIS NOM.",
+                "pricePerShare": 4780.0,
+                "return": -0.0033320318507103672,
+                "risk": 2.8828118077391935e-05,
+                "sharpeRatio": -118.4271495470173,
+                "capital": 23990.72570339583,
+                "weight": 0.23990725703395832,
+                "shares": 5
+            },
+            "VIRP.PA": {
+                "companyName": "VIRBAC",
+                "pricePerShare": 340.0,
+                "return": 0.0007680301322678358,
+                "risk": 0.00012876361078739855,
+                "sharpeRatio": 5.32782614647658,
+                "capital": 7762.581370414943,
+                "weight": 0.07762581370414944,
+                "shares": 22
+            },
+            "SAF.PA": {
+                "companyName": "SAFRAN",
+                "pricePerShare": 195.44000244140625,
+                "return": 0.0052303385435133335,
+                "risk": 0.00015098910741723892,
+                "sharpeRatio": 34.09741690363507,
+                "capital": 41416.14010767638,
+                "weight": 0.4141614010767638,
+                "shares": 211
+            }
+        }
+    }
+}

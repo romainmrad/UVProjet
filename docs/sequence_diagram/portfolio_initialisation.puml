@@ -31,7 +31,7 @@ Portfolio -> Portfolio: Instantiate object
 activate Portfolio #LightSlateGrey
 Portfolio <-> Market: Get top stocks stickers
 deactivate Market
-loop Top stocks tickers
+loop #LightBlue Top stocks tickers
 Portfolio -> Stock: Instantiate stock objects
 activate Stock #LightSlateGrey
 Stock <-> "YFinance API": Load data
@@ -44,7 +44,7 @@ end
 
 group Portfolio Optimisation
 Portfolio -> Portfolio: Optimise weights
-loop Portfolio stocks
+loop #LightBlue Portfolio stocks
 Portfolio -> Stock: Set weights
 activate Stock #LightSlateGrey
 Stock -> Stock: Compute stock \nshares and capital

@@ -3,11 +3,13 @@ import pandas as pd
 import yfinance as yf
 import numpy as np
 
+from typing import Literal
 from keras.backend import clear_session
 from sklearn.preprocessing import MinMaxScaler
 
 from src.utilities import train_test_split, model_selection, plot_prediction
-from src.parameters import target_period, target_symbols, risk_free_rate, minimum_share_price, lookback, prediction_metric
+from src.parameters import (target_period, target_symbols, risk_free_rate, minimum_share_price, lookback,
+                            prediction_metric)
 from src.stock import Stock
 
 
@@ -15,6 +17,7 @@ class Market(object):
     """
     The Market
     """
+
     def __init__(self) -> None:
         """
         Market constructor
@@ -52,32 +55,36 @@ class Market(object):
 
     def extract_top_n_stocks(
             self,
-            n_stocks: int
+            n_stocks: int,
+            choice_method: Literal['prediction', 'historical']
     ) -> list[str]:
         """
         Extract the top n stocks
         :param n_stocks: number of stocks to extract
+        :param choice_method: method to choose for stock selection
         :return: list of stock ticker symbols
         """
-        market_returns = self.data.pct_change(periods=-1)[:-1].fillna(method='ffill', axis=0)
-        mean_returns = list(market_returns.mean())
-        top_indices = np.argsort(mean_returns)[-n_stocks:][::-1]
-        return self.data.columns[top_indices].tolist()
-
-    def extract_top_n_predicted_stocks(
-            self,
-            n_stocks: int
-    ) -> list[str]:
-        predictions = []
-        predicted_stock_ticker_symbols = []
-        for ticker in self.stock_symbols:
-            current_stock = Stock(ticker)
-            current_prediction = current_stock.predict()
-            if current_prediction is not None and current_prediction > current_stock.price:
-                predictions.append(current_prediction - current_stock.price)
-                predicted_stock_ticker_symbols.append(ticker)
-        top_indices = np.argsort(predictions)[-n_stocks:][::-1]
-        return [predicted_stock_ticker_symbols[i] for i in top_indices]
+        match choice_method:
+            case 'historical':
+                market_returns = self.data.pct_change(periods=-1)[:-1].fillna(method='ffill', axis=0)
+                mean_returns = list(market_returns.mean())
+                top_indices = np.argsort(mean_returns)[-n_stocks:][::-1]
+                return self.data.columns[top_indices].tolist()
+            case 'prediction':
+                predictions = []
+                predicted_stock_ticker_symbols = []
+                for ticker in self.stock_symbols:
+                    current_stock = Stock(ticker)
+                    current_prediction = current_stock.predict()
+                    if (
+                            current_prediction is not None
+                            and current_prediction > current_stock.price
+                            and current_stock.expected_return > 0
+                    ):
+                        predictions.append(current_prediction - current_stock.price)
+                        predicted_stock_ticker_symbols.append(ticker)
+                top_indices = np.argsort(predictions)[-n_stocks:][::-1]
+                return [predicted_stock_ticker_symbols[i] for i in top_indices]
 
     def train_models(self):
         # Iterating over all market stocks

@@ -3,5 +3,5 @@
     "capital": 100000,
     "optimisationFactor": "sharpeRatio",
     "minimumProportion": 0.05,
-    "lookback": 50
+    "initialisationMethod": "prediction"
 }

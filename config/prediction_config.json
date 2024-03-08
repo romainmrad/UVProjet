@@ -1,0 +1,5 @@
+{
+    "predictionMetric": "mean_squared_error",
+    "maxLayers": 5,
+    "lookback": 50
+}

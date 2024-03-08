@@ -24,7 +24,7 @@ Portfolio -> Portfolio: Instantiate Portfolio \nobject
 activate Portfolio #LightSlateGrey
 Portfolio <-> "Local data": Load Portfolio data
 Portfolio -> Portfolio: Evaluate current value
-loop Portfolio stocks
+loop #LightBlue Portfolio stocks
 Portfolio <-> Stock: Evaluate stock value
 activate Stock #LightSlateGrey
 Stock <-> "YFinance API": Download current Adj Close price

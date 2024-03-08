@@ -61,11 +61,3 @@ end
 deactivate Decision
 end
 @enduml
-
-@startuml
-colors SteelBlue
-@enduml
-
-@startuml
-colors 3D8B7F
-@enduml

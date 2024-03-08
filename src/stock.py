@@ -103,9 +103,12 @@ class Stock(object):
         stock_dict['return'] = self.expected_return
         stock_dict['risk'] = self.risk
         stock_dict['sharpeRatio'] = self.sharpe_ratio
-        stock_dict['capital'] = self.capital
-        stock_dict['weight'] = self.weight
-        stock_dict['shares'] = int(stock_dict['capital'] // stock_dict['pricePerShare'])
+        stock_dict['capital'] = self.capital if not None else None
+        stock_dict['weight'] = self.weight if not None else None
+        if stock_dict['capital'] is not None and stock_dict['weight'] is not None:
+            stock_dict['shares'] = int(stock_dict['capital'] // stock_dict['pricePerShare'])
+        else:
+            stock_dict['shares'] = None
         return stock_dict
 
     @staticmethod
@@ -137,11 +140,15 @@ class Stock(object):
             print(f'Model found and loaded for {self.ticker}')
         except FileNotFoundError:
             print(f'No model trained for {self.ticker}')
+        except OSError:
+            print(f'No model trained for {self.ticker}')
         # Load scaler
         try:
             scaler = joblib.load(f'../models/scaler/{self.ticker}.save')
             print(f'Scaler found and loaded for {self.ticker}')
         except FileNotFoundError:
+            print(f'No scaler fitted for {self.ticker}')
+        except OSError:
             print(f'No scaler fitted for {self.ticker}')
         return model, scaler
 

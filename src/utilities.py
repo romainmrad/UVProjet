@@ -5,13 +5,12 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 from typing import Literal
-from datetime import datetime
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
 from keras.utils import plot_model
 from sklearn.metrics import r2_score, mean_squared_error
 
-from src.parameters import prediction_metric
+from src.parameters import prediction_metric, max_layers
 
 
 def split_data(
@@ -108,7 +107,7 @@ def model_selection(
     best_model_predictions = None
     # Iterating over number of sequential_models
     print(f'Starting model selection for {ticker}:')
-    for n_models in range(5):
+    for n_models in range(max_layers):
         # Instantiating model
         model = Sequential()
         model._name = f'model_{n_models}'
@@ -198,9 +197,19 @@ def plot_prediction(
         if not os.path.exists('../graphs/prediction/'):
             # Create the directory
             os.makedirs('../graphs/prediction/')
-        current_date = datetime.now().date().strftime('%Y-%m-%d')
         plt.tight_layout()
-        plt.savefig(f'../graphs/prediction/{ticker}_{current_date}.png')
+        plt.savefig(f'../graphs/prediction/{ticker}.png')
         plt.close()
     else:
         plt.show()
+
+
+def filter_portfolio_evolution(pf_values: dict) -> dict:
+    """
+    Remove duplicate values and dates from portfolio evolution data
+    :param pf_values:
+    :return:
+    """
+    df = pd.DataFrame(pf_values)
+    df = df.drop_duplicates(subset='date', keep='first')
+    return df.to_dict(orient='list')

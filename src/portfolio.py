@@ -9,6 +9,7 @@ from datetime import datetime
 from scipy.optimize import minimize, Bounds, LinearConstraint
 
 from src.parameters import capital, number_of_assets, optimisation_factor, risk_free_rate, minimum_proportion
+from src.utilities import filter_portfolio_evolution
 from src.stock import Stock
 from src.market import Market
 
@@ -17,6 +18,7 @@ class Portfolio(object):
     """
     The Portfolio
     """
+
     def __init__(self) -> None:
         """
         Portfolio constructor
@@ -52,6 +54,17 @@ class Portfolio(object):
         elif isinstance(stock, str):
             stock = Stock(stock)
             self.stocks.append(stock)
+
+    def add_stocks(
+            self,
+            stocks: list[Stock] | list[str]
+    ) -> None:
+        """
+        Add multiple stocks to the portfolio
+        :param stocks: list of stocks to add, or ticker symbols
+        """
+        for stock in stocks:
+            self.add_stock(stock)
 
     def remove_stock(
             self,
@@ -127,6 +140,15 @@ class Portfolio(object):
         pf.value = 0
         return pf
 
+    @staticmethod
+    def load_current_portfolio():
+        """
+        Load portfolio from local data
+        """
+        # Loading portfolio
+        with open('../data/current_portfolio.json', 'r') as f:
+            return Portfolio.from_dict(json.load(f))
+
     def to_dict(self) -> dict:
         """
         Convert portfolio to dictionary
@@ -150,7 +172,7 @@ class Portfolio(object):
         Update portfolio in JSON file
         """
         # Output portfolio to JSON file
-        with open('../data/portfolio/current_portfolio.json', 'w') as file:
+        with open('../data/current_portfolio.json', 'w') as file:
             json.dump(self.to_dict(), file, indent=4)
 
     def plot(self) -> None:
@@ -227,16 +249,17 @@ class Portfolio(object):
         Append the portfolio value to the portfolio historical values file
         """
         current_date = datetime.now().date().strftime('%Y-%m-%d')
-        if os.path.exists('../data/portfolio/portfolio_evolution.json'):
-            with open('../data/portfolio/portfolio_evolution.json', 'r') as f:
+        if os.path.exists('../data/portfolio_evolution.json'):
+            with open('../data/portfolio_evolution.json', 'r') as f:
                 pf_values = json.load(f)
                 pf_values['date'].append(current_date)
                 pf_values['value'].append(self.value)
-            with open('../data/portfolio/portfolio_evolution.json', 'w') as f:
+                pf_values = filter_portfolio_evolution(pf_values=pf_values)
+            with open('../data/portfolio_evolution.json', 'w') as f:
                 json.dump(pf_values, f, indent=4)
         else:
             pf_values = {'date': [current_date], 'value': [self.value]}
-            with open('../data/portfolio/portfolio_evolution.json', 'w') as f:
+            with open('../data/portfolio_evolution.json', 'w') as f:
                 json.dump(pf_values, f, indent=4)
 
     @staticmethod
@@ -244,7 +267,7 @@ class Portfolio(object):
         """
         Plot the portfolio evolution
         """
-        with open('../data/portfolio/portfolio_evolution.json', 'r') as f:
+        with open('../data/portfolio_evolution.json', 'r') as f:
             pf_values = json.load(f)
             plt.figure(figsize=(20, 10))
             sns.lineplot(x=pf_values['date'], y=pf_values['value'])
@@ -265,8 +288,13 @@ class Portfolio(object):
                 self.remove_stock(stock)
 
     def suggest_action(self):
+        """
+        Predict the portfolio evolution and output a suggestion
+        """
+        # Predict portfolio stocks
         self.predict()
         if len(self.bearish_stocks) == 0:
+            # Evaluate portfolio and update local data if portfolio is bullish
             self.evaluate()
             self.update()
             self.update_evolution()
@@ -274,43 +302,64 @@ class Portfolio(object):
             print('Bullish portfolio, no action to suggest')
             return None
         else:
+            print('Bearish stocks in portfolio:')
+            # Print bearish stocks
+            for bearish_stock in self.bearish_stocks:
+                print(f' - {bearish_stock.ticker}')
+            # Instantiate suggestion dictionary
             action = {
                 'sell': dict(),
                 'buy': dict(),
                 'suggestedPortfolio': dict()
             }
+            # Add bearish portfolio stocks to 'sell' dictionary
             for stock in self.bearish_stocks:
-                action['Sell'][stock.ticker] = stock.shares
+                action['sell'][stock.ticker] = stock.shares
+            # Instantiate market and remove used stock tickers
             market = Market()
             market.remove_stock_symbols([s.ticker for s in self.bearish_stocks])
             market.remove_stock_symbols([s.ticker for s in self.stocks])
-            old_stocks = self.stocks.copy()
-            top_performing_stocks = market.extract_top_n_predicted_stocks(len(self.bearish_stocks))
+            # Save old stock objects
+            old_stocks = self.stocks
+            # Extract best predicted stocks and add them to portfolio
+            top_performing_stocks = market.extract_top_n_stocks(
+                n_stocks=len(self.bearish_stocks),
+                choice_method='prediction'
+            )
             for stock in top_performing_stocks:
                 self.add_stock(stock)
+            # Optimise portfolio
             self.optimise()
+            # Add modifications to 'sell' or 'buy' dictionary
             for old_stock in old_stocks:
                 for new_stock in self.stocks:
                     if old_stock.ticker == new_stock.ticker:
                         if new_stock.shares > old_stock.shares:
-                            action['Buy'][new_stock.ticker] = new_stock.shares - old_stock.shares
-                        elif new_stock.shares > old_stock.shares:
-                            action['Sell'][new_stock.ticker] = old_stock.shares - new_stock.shares
+                            action['buy'][new_stock.ticker] = new_stock.shares - old_stock.shares
+                        elif new_stock.shares < old_stock.shares:
+                            action['sell'][new_stock.ticker] = old_stock.shares - new_stock.shares
+            # Evaluate suggested portfolio value
+            self.evaluate()
+            # Dump suggestion to JSON
             action['suggestedPortfolio'] = self.to_dict()
-            with open('../data/portfolio/suggested_portfolio.json', 'w') as f:
-                json.dump(action, f)
+            with open('../data/suggested_portfolio.json', 'w') as f:
+                json.dump(action, f, indent=4)
+
+    @staticmethod
+    def load_suggested_portfolio():
+        """
+        Loads suggested portfolio
+        """
+        # Loading portfolio
+        with open('../data/suggested_portfolio.json', 'r') as f:
+            return Portfolio.from_dict(json.load(f)['suggestedPortfolio'])
 
     def act_on_suggestion(self):
         """
         Acts on suggested portfolio
-        :return:
         """
-        with open('../data/portfolio/suggested_portfolio.json', 'r') as f:
+        with open('../data/suggested_portfolio.json', 'r') as f:
             pf = self.from_dict(json.load(f)['suggestedPortfolio'])
         pf.update()
         pf.update_evolution()
         pf.plot_evolution()
-
-
-if __name__ == '__main__':
-    Portfolio.plot_evolution()
