@@ -164,7 +164,3 @@ cython_debug/
 
 # Custom
 *.docx
-*.pdf
-*.csv
-*.ipynb
-*.npy

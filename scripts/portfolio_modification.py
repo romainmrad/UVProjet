@@ -8,3 +8,9 @@ if __name__ == "__main__":
     pf.evaluate()
     # Update current portfolio
     pf.update()
+    pf.plot()
+    print('Updated portfolio according to suggestion')
+    pf.update_evolution()
+    print('Updated portfolio evolution JSON')
+    pf.plot_evolution()
+    print('Plotted portfolio evolution JSON')

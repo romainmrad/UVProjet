@@ -1,4 +1,3 @@
-import json
 from src.portfolio import Portfolio
 
 
@@ -8,6 +7,7 @@ if __name__ == '__main__':
     # Evaluate portfolio value and update local data and plot
     pf.evaluate()
     pf.update()
+    pf.plot()
     print('Portfolio evaluation completed')
     pf.update_evolution()
     print('Updated portfolio evolution JSON')

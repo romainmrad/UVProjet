@@ -18,8 +18,11 @@ if __name__ == '__main__':
     # Computing portfolio characteristics
     pf.compute_characteristics()
     # Formatting portfolio data as JSON
+    pf.evaluate()
     pf.update()
-    print('Portfolio JSON file created')
-    # Plotting portfolio
     pf.plot()
-    print('Portfolio plot image created')
+    print('Portfolio evaluation completed')
+    pf.update_evolution()
+    print('Updated portfolio evolution JSON')
+    pf.plot_evolution()
+    print('Plotted portfolio evolution JSON')

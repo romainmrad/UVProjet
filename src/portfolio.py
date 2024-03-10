@@ -174,6 +174,11 @@ class Portfolio(object):
         # Output portfolio to JSON file
         with open('../data/current_portfolio.json', 'w') as file:
             json.dump(self.to_dict(), file, indent=4)
+        with open('../config/portfolio_config.json', 'r') as file:
+            portfolio_config = json.load(file)
+            portfolio_config['capital'] = self.value
+        with open('../config/portfolio_config.json', 'w') as file:
+            json.dump(portfolio_config, file, indent=4)
 
     def plot(self) -> None:
         """
@@ -309,7 +314,6 @@ class Portfolio(object):
             # Instantiate suggestion dictionary
             action = {
                 'sell': dict(),
-                'buy': dict(),
                 'suggestedPortfolio': dict()
             }
             # Add bearish portfolio stocks to 'sell' dictionary
@@ -333,11 +337,8 @@ class Portfolio(object):
             # Add modifications to 'sell' or 'buy' dictionary
             for old_stock in old_stocks:
                 for new_stock in self.stocks:
-                    if old_stock.ticker == new_stock.ticker:
-                        if new_stock.shares > old_stock.shares:
-                            action['buy'][new_stock.ticker] = new_stock.shares - old_stock.shares
-                        elif new_stock.shares < old_stock.shares:
-                            action['sell'][new_stock.ticker] = old_stock.shares - new_stock.shares
+                    if old_stock.ticker == new_stock.ticker and new_stock.shares < old_stock.shares:
+                        action['sell'][new_stock.ticker] = old_stock.shares - new_stock.shares
             # Evaluate suggested portfolio value
             self.evaluate()
             # Dump suggestion to JSON
