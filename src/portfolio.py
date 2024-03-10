@@ -296,6 +296,11 @@ class Portfolio(object):
         """
         Predict the portfolio evolution and output a suggestion
         """
+        # Instantiate suggestion dictionary
+        action = {
+            'sell': dict(),
+            'suggestedPortfolio': dict()
+        }
         # Predict portfolio stocks
         self.predict()
         if len(self.bearish_stocks) == 0:
@@ -311,11 +316,6 @@ class Portfolio(object):
             # Print bearish stocks
             for bearish_stock in self.bearish_stocks:
                 print(f' - {bearish_stock.ticker}')
-            # Instantiate suggestion dictionary
-            action = {
-                'sell': dict(),
-                'suggestedPortfolio': dict()
-            }
             # Add bearish portfolio stocks to 'sell' dictionary
             for stock in self.bearish_stocks:
                 action['sell'][stock.ticker] = stock.shares
@@ -343,8 +343,8 @@ class Portfolio(object):
             self.evaluate()
             # Dump suggestion to JSON
             action['suggestedPortfolio'] = self.to_dict()
-            with open('../data/suggested_portfolio.json', 'w') as f:
-                json.dump(action, f, indent=4)
+        with open('../data/suggested_portfolio.json', 'w') as f:
+            json.dump(action, f, indent=4)
 
     @staticmethod
     def load_suggested_portfolio():

@@ -62,12 +62,12 @@ If you already have an initialised portfolio and a prediction from day N-1:
 
 ### Scripts
 - [Portfolio initialisation script](scripts/portfolio_initialisation.py) initialises the optimal portfolio
-([UML Diagram](docs/sequence_diagram/portfolio_initialisation.png))
+([UML Diagram](docs/sequence/portfolio_initialisation.png))
 - [Portfolio evaluation script](scripts/portfolio_evaluation.py) evaluates the current portfolio value and updates the 
-evolution graph ([UML Diagram](docs/sequence_diagram/portfolio_evaluation.png))
+evolution graph ([UML Diagram](docs/sequence/portfolio_evaluation.png))
 - [Portfolio prediction script](scripts/portfolio_prediction.py) predicts the portfolio stock prices and suggests an 
-investment if some stocks are Bearish ([UML Diagram](docs/sequence_diagram/portfolio_prediction.png))
+investment if some stocks are Bearish ([UML Diagram](docs/sequence/portfolio_prediction.png))
 - [Portfolio modification script](scripts/portfolio_modification.py) implements the suggested portfolio from day N-1 
 - [Models training script](scripts/train_models.py) trains an LSTM model for each stock listed in the 
-[market configuration file](config/market_config.json) ([UML Diagram](docs/sequence_diagram/train_models.png))
+[market configuration file](config/market_config.json) ([UML Diagram](docs/sequence/train_models.png))
 
