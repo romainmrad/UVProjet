@@ -1,6 +1,7 @@
 {
     "sell": {
-        "VIRP.PA": 22
+        "EQS.PA": 123,
+        "IDL.PA": 24
     },
     "suggestedPortfolio": {
         "characteristics": {
@@ -9,58 +10,58 @@
             "risk": 0.00010704227017568682,
             "sharpeRatio": 93.81530388473529,
             "capital": 100000,
-            "value": 99334.42026519775
+            "value": 90304.34912109375
         },
         "stocks": {
             "ES.PA": {
                 "companyName": "ESSO",
-                "pricePerShare": 83.0999984741211,
+                "pricePerShare": 85.75,
                 "return": 0.017164329623589814,
                 "risk": 0.0012635899631763478,
                 "sharpeRatio": 13.518886760266067,
-                "capital": 11245.100386159178,
-                "weight": 0.11245100386159178,
-                "shares": 135
+                "capital": 27697.96518111668,
+                "weight": 0.29829395068068276,
+                "shares": 323
             },
-            "LIN.PA": {
-                "companyName": "LINEDATA SERVICES",
-                "pricePerShare": 74.0,
-                "return": 0.01038507253192225,
-                "risk": 0.00026671071119735196,
-                "sharpeRatio": 38.63014157049926,
-                "capital": 13811.804109095177,
-                "weight": 0.13811804109095177,
-                "shares": 186
+            "SU.PA": {
+                "companyName": "SCHNEIDER ELECTRIC SE",
+                "pricePerShare": 214.6999969482422,
+                "return": 0.003942324654924897,
+                "risk": 0.00015714182281339768,
+                "sharpeRatio": 24.5658640444113,
+                "capital": 46017.17512299861,
+                "weight": 0.4955831548218692,
+                "shares": 214
             },
-            "ARTO.PA": {
-                "companyName": "ARTOIS NOM.",
-                "pricePerShare": 4780.0,
-                "return": -0.0033320318507103672,
-                "risk": 2.8828118077391935e-05,
-                "sharpeRatio": -118.4271495470173,
-                "capital": 19332.768781619325,
-                "weight": 0.19332768781619325,
-                "shares": 4
+            "SOP.PA": {
+                "companyName": "SOPRA STERIA GROUP",
+                "pricePerShare": 230.39999389648438,
+                "return": 0.0029615444946557564,
+                "risk": 0.0006035441406901639,
+                "sharpeRatio": 4.771058652583296,
+                "capital": 4642.730046000804,
+                "weight": 0.050000001022084246,
+                "shares": 20
             },
-            "SAF.PA": {
-                "companyName": "SAFRAN",
-                "pricePerShare": 195.44000244140625,
-                "return": 0.0052303385435133335,
-                "risk": 0.00015098910741723892,
-                "sharpeRatio": 34.09741690363507,
-                "capital": 37769.640463431,
-                "weight": 0.37769640463431003,
-                "shares": 193
+            "FMONC.PA": {
+                "companyName": "MONCEY (FIN.) NOM.",
+                "pricePerShare": 7550.0,
+                "return": 0.0011426811639796697,
+                "risk": 0.00029345308321569773,
+                "sharpeRatio": 3.6144829434285883,
+                "capital": 9853.998646615397,
+                "weight": 0.10612289267750832,
+                "shares": 1
             },
-            "BUR.PA": {
-                "companyName": "BURELLE",
-                "pricePerShare": 398.0,
-                "return": 0.000694277566370363,
-                "risk": 0.0001962522004047243,
-                "sharpeRatio": 3.119850707954783,
-                "capital": 17840.68625969532,
-                "weight": 0.1784068625969532,
-                "shares": 44
+            "DIM.PA": {
+                "companyName": "SARTORIUS STED BIO",
+                "pricePerShare": 264.8999938964844,
+                "return": 0.0019308382460681394,
+                "risk": 0.00034244893968344756,
+                "sharpeRatio": 5.398872742246379,
+                "capital": 4642.730025179705,
+                "weight": 0.050000000797850885,
+                "shares": 17
             }
         }
     }

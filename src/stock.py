@@ -173,6 +173,5 @@ class Stock(object):
         Predict stock movement
         :return: True if stock is bearish, False if bullish
         """
-        return (self.price - self.predict()) < trading_fee
-
+        return self.predict() + trading_fee > self.price
 

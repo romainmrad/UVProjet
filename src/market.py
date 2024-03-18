@@ -119,8 +119,3 @@ class Market(object):
                 else:
                     print(f'Failure to fit model for {ticker}')
                 clear_session()
-
-
-if __name__ == '__main__':
-    market = Market()
-    market.train_models()

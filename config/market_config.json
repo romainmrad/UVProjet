@@ -2,7 +2,7 @@
     "period": "1mo",
     "riskFreeRate": 0.000082,
     "minimumSharePrice": 5,
-    "tradingFee": 2,
+    "tradingFee": 0.5,
     "stockTickerSymbols": [
         "AAA.PA",
         "ABEO.PA",

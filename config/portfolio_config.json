@@ -1,6 +1,6 @@
 {
     "numberOfAssets": 5,
-    "capital": 100000,
+    "capital": 92854.59902191162,
     "optimisationFactor": "sharpeRatio",
     "minimumProportion": 0.05,
     "initialisationMethod": "prediction"

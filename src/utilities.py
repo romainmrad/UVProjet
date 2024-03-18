@@ -211,5 +211,5 @@ def filter_portfolio_evolution(pf_values: dict) -> dict:
     :return:
     """
     df = pd.DataFrame(pf_values)
-    df = df.drop_duplicates(subset='date', keep='first')
+    df = df.drop_duplicates(subset='date', keep='last')
     return df.to_dict(orient='list')
