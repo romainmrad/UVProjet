@@ -1,7 +1,7 @@
 {
     "sell": {
-        "EQS.PA": 123,
-        "IDL.PA": 24
+        "FMONC.PA": 1,
+        "VIRP.PA": 11
     },
     "suggestedPortfolio": {
         "characteristics": {
@@ -10,57 +10,57 @@
             "risk": 0.00010704227017568682,
             "sharpeRatio": 93.81530388473529,
             "capital": 100000,
-            "value": 90304.34912109375
+            "value": 73840.70011901855
         },
         "stocks": {
             "ES.PA": {
                 "companyName": "ESSO",
-                "pricePerShare": 85.75,
+                "pricePerShare": 121.9000015258789,
                 "return": 0.017164329623589814,
                 "risk": 0.0012635899631763478,
                 "sharpeRatio": 13.518886760266067,
-                "capital": 27697.96518111668,
-                "weight": 0.29829395068068276,
-                "shares": 323
+                "capital": 5478.233619576892,
+                "weight": 0.07251693218871019,
+                "shares": 44
+            },
+            "RMS.PA": {
+                "companyName": "HERMES INTL",
+                "pricePerShare": 2405.0,
+                "return": 0.0020365833463264404,
+                "risk": 8.839940404146647e-05,
+                "sharpeRatio": 22.110820401114726,
+                "capital": 58734.28153354098,
+                "weight": 0.77748234319539,
+                "shares": 24
+            },
+            "BUR.PA": {
+                "companyName": "BURELLE",
+                "pricePerShare": 429.0,
+                "return": 0.003978495996985425,
+                "risk": 0.0003549632831994382,
+                "sharpeRatio": 10.97718040543409,
+                "capital": 3777.2203173537623,
+                "weight": 0.050000136656551834,
+                "shares": 8
+            },
+            "BLEE.PA": {
+                "companyName": "BLEECKER",
+                "pricePerShare": 150.0,
+                "return": 0.00021885596343800828,
+                "risk": 0.0025747557141372677,
+                "sharpeRatio": 0.05315298949976894,
+                "capital": 3777.212844888736,
+                "weight": 0.0500000377414129,
+                "shares": 25
             },
             "SU.PA": {
                 "companyName": "SCHNEIDER ELECTRIC SE",
-                "pricePerShare": 214.6999969482422,
-                "return": 0.003942324654924897,
-                "risk": 0.00015714182281339768,
-                "sharpeRatio": 24.5658640444113,
-                "capital": 46017.17512299861,
-                "weight": 0.4955831548218692,
-                "shares": 214
-            },
-            "SOP.PA": {
-                "companyName": "SOPRA STERIA GROUP",
-                "pricePerShare": 230.39999389648438,
-                "return": 0.0029615444946557564,
-                "risk": 0.0006035441406901639,
-                "sharpeRatio": 4.771058652583296,
-                "capital": 4642.730046000804,
-                "weight": 0.050000001022084246,
-                "shares": 20
-            },
-            "FMONC.PA": {
-                "companyName": "MONCEY (FIN.) NOM.",
-                "pricePerShare": 7550.0,
-                "return": 0.0011426811639796697,
-                "risk": 0.00029345308321569773,
-                "sharpeRatio": 3.6144829434285883,
-                "capital": 9853.998646615397,
-                "weight": 0.10612289267750832,
-                "shares": 1
-            },
-            "DIM.PA": {
-                "companyName": "SARTORIUS STED BIO",
-                "pricePerShare": 264.8999938964844,
-                "return": 0.0019308382460681394,
-                "risk": 0.00034244893968344756,
-                "sharpeRatio": 5.398872742246379,
-                "capital": 4642.730025179705,
-                "weight": 0.050000000797850885,
+                "pricePerShare": 210.3000030517578,
+                "return": 0.0007290422257383458,
+                "risk": 0.0001410016078890899,
+                "sharpeRatio": 4.588899626217746,
+                "capital": 3777.2515595171394,
+                "weight": 0.050000550217929526,
                 "shares": 17
             }
         }

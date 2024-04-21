@@ -9,7 +9,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 from src.utilities import train_test_split, model_selection, plot_prediction
 from src.parameters import (target_period, target_symbols, risk_free_rate, minimum_share_price, lookback,
-                            prediction_metric)
+                            prediction_metric, trading_fee)
 from src.stock import Stock
 
 
@@ -78,7 +78,7 @@ class Market(object):
                     current_prediction = current_stock.predict()
                     if (
                             current_prediction is not None
-                            and current_prediction > current_stock.price
+                            and current_prediction + trading_fee > current_stock.price
                             and current_stock.expected_return > 0
                     ):
                         predictions.append(current_prediction - current_stock.price)

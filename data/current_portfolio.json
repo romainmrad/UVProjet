@@ -5,58 +5,58 @@
         "risk": 0.00010704227017568682,
         "sharpeRatio": 93.81530388473529,
         "capital": 100000,
-        "value": 92854.59902191162
+        "value": 75544.19987487793
     },
     "stocks": {
         "ES.PA": {
             "companyName": "ESSO",
-            "pricePerShare": 85.75,
+            "pricePerShare": 122.19999694824219,
             "return": 0.017164329623589814,
             "risk": 0.0012635899631763478,
             "sharpeRatio": 13.518886760266067,
-            "capital": 27170.395761378437,
-            "weight": 0.29103898827035235,
-            "shares": 316
+            "capital": 5268.899667273996,
+            "weight": 0.06704436183284102,
+            "shares": 43
         },
-        "EQS.PA": {
-            "companyName": "EQUASENS",
-            "pricePerShare": 50.099998474121094,
-            "return": 0.0013224465024262576,
-            "risk": 0.00024389434783771824,
-            "sharpeRatio": 5.085999382206358,
-            "capital": 6184.774537384599,
-            "weight": 0.06624896228413753,
-            "shares": 123
+        "RMS.PA": {
+            "companyName": "HERMES INTL",
+            "pricePerShare": 2406.5,
+            "return": 0.0020365833463264404,
+            "risk": 8.839940404146647e-05,
+            "sharpeRatio": 22.110820401114726,
+            "capital": 55975.174399266405,
+            "weight": 0.7122587414959101,
+            "shares": 23
         },
-        "SU.PA": {
-            "companyName": "SCHNEIDER ELECTRIC SE",
-            "pricePerShare": 214.6999969482422,
-            "return": 0.003942324654924897,
-            "risk": 0.00015714182281339768,
-            "sharpeRatio": 24.5658640444113,
-            "capital": 47166.5876693801,
-            "weight": 0.505230622182326,
-            "shares": 219
+        "FMONC.PA": {
+            "companyName": "MONCEY (FIN.) NOM.",
+            "pricePerShare": 7600.0,
+            "return": 0.0011558589455855528,
+            "risk": 0.00032136485216878577,
+            "sharpeRatio": 3.341556919925847,
+            "capital": 9485.354528075912,
+            "weight": 0.12069684018525227,
+            "shares": 1
         },
-        "IDL.PA": {
-            "companyName": "ID LOGISTICS GROUP",
-            "pricePerShare": 332.0,
-            "return": 0.002608985941198342,
-            "risk": 0.0002831643873808516,
-            "sharpeRatio": 8.924095168081944,
-            "capital": 8166.964082178132,
-            "weight": 0.08748142590900718,
-            "shares": 24
+        "BUR.PA": {
+            "companyName": "BURELLE",
+            "pricePerShare": 429.0,
+            "return": 0.003978495996985425,
+            "risk": 0.0003549632831994382,
+            "sharpeRatio": 10.97718040543409,
+            "capital": 3929.416122366243,
+            "weight": 0.05000004041375527,
+            "shares": 9
         },
-        "SOP.PA": {
-            "companyName": "SOPRA STERIA GROUP",
-            "pricePerShare": 230.39999389648438,
-            "return": 0.0029615444946557564,
-            "risk": 0.0006035441406901639,
-            "sharpeRatio": 4.771058652583296,
-            "capital": 4667.8276094077355,
-            "weight": 0.050000001354176926,
-            "shares": 20
+        "VIRP.PA": {
+            "companyName": "VIRBAC",
+            "pricePerShare": 338.5,
+            "return": 0.0007479604775521855,
+            "risk": 0.0002549263024852993,
+            "sharpeRatio": 2.6123647150555955,
+            "capital": 3929.4142094086747,
+            "weight": 0.05000001607223664,
+            "shares": 11
         }
     }
 }
