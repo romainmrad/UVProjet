@@ -1,5 +1,5 @@
-# Project : Machine Learning module for portfolio profitability prediction and trading recommendation
-Romain MRAD - Yoan Hakoun 
+# Project : LSTM for portfolio return prediction and trading recommendation
+Romain MRAD 
 
 ## Introduction
 
